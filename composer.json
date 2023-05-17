@@ -1,0 +1,49 @@
+{
+    "name": "projektgopher/whisky",
+    "description": "A simple CLI tool for managing a project's git hooks across multiple members.",
+    "keywords": ["git", "hooks", "cli", "laravel", "php", "projektgopher", "whisky"],
+    "homepage": "https://github.com/ProjektGopher/whisky",
+    "type": "project",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/ProjektGopher/whisky/issues",
+        "source": "https://github.com/ProjektGopher/whisky"
+    },
+    "authors": [
+        {
+            "name": "Len Woodward",
+            "email": "Len@ProjektGopher.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "laravel-zero/framework": "^10.0.2",
+        "nunomaduro/termwind": "^1.15.1"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.8",
+        "mockery/mockery": "^1.5.1",
+        "pestphp/pest": "^2.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "bin": ["whisky"]
+}

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Create a list of all staged files
+# filter out deleted files
+STAGED_FILES=$(git diff --name-only --cached --diff-filter=d)
+
+# Pass that list of files to the following commands
+if [ -n "$STAGED_FILES" ]; then
+    # Re-stage the files that were just linted
+    git add $STAGED_FILES
+fi
