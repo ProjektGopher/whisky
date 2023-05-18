@@ -2,8 +2,9 @@
 
 namespace App\Commands;
 
-use LaravelZero\Framework\Commands\Command;
+use App\Whisky;
 use Illuminate\Support\Facades\File;
+use LaravelZero\Framework\Commands\Command;
 
 /**
  * This command is basically only needed to build the execution path
@@ -17,13 +18,13 @@ class GetRunCmd extends Command
 
     public function handle(): int
     {
-        if (File::exists(__DIR__.'/../../bin/skip-once')) {
-            File::delete(__DIR__.'/../../bin/skip-once');
+        if (File::exists(Whisky::base_path('bin/skip-once'))) {
+            File::delete(Whisky::base_path('bin/skip-once'));
 
             return Command::SUCCESS;
         }
 
-        $this->line(__DIR__."/../../bin/run-hook {$this->argument('hook')}");
+        $this->line(Whisky::base_path("bin/run-hook {$this->argument('hook')}"));
 
         return Command::SUCCESS;
     }

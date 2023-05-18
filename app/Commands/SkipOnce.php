@@ -2,8 +2,9 @@
 
 namespace App\Commands;
 
-use LaravelZero\Framework\Commands\Command;
+use App\Whisky;
 use Illuminate\Support\Facades\File;
+use LaravelZero\Framework\Commands\Command;
 
 class SkipOnce extends Command
 {
@@ -13,7 +14,7 @@ class SkipOnce extends Command
 
     public function handle(): int
     {
-        File::put(__DIR__.'/../../bin/skip-once', '');
+        File::put(Whisky::base_path('bin/skip-once'), '');
 
         $this->info('Next hook will be skipped.');
         $this->line('If the action you\'re about to take has a `pre` and `post` hook');

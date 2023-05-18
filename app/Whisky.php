@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Phar;
 use Illuminate\Support\Facades\File;
 
 class Whisky
@@ -18,6 +19,13 @@ class Whisky
         }
 
         return getcwd();
+    }
+
+    public static function base_path(string $path = ''): string
+    {
+        return Phar::running()
+            ? Whisky::cwd("vendor/projektgopher/whisky/{$path}")
+            : base_path($path);
     }
 
     public static function readConfig(string $key): string|array

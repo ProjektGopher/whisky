@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
+use Phar;
 
 class Install extends Command
 {
@@ -23,7 +24,10 @@ class Install extends Command
         }
 
         $this->info('Creating whisky.json in project root...');
-        File::put(Whisky::cwd('whisky.json'), File::get(__DIR__.'/../../stubs/whisky.json'));
+        File::put(
+            Whisky::cwd('whisky.json'),
+            File::get(Whisky::base_path('stubs/whisky.json')),
+        );
 
         $this->info('Installing git hooks...');
 
@@ -40,7 +44,7 @@ class Install extends Command
         $this->info('Verifying hooks are executable...');
         exec('chmod +x '.Whisky::readConfig('scriptsDir').'/*');
         exec('chmod +x '.Whisky::cwd('.git/hooks').'/*');
-        exec('chmod +x '.__DIR__.'/../../bin/run-hook');
+        exec('chmod +x '.Whisky::base_path('bin/run-hook'));
 
         $this->info('Git hooks installed successfully.');
 

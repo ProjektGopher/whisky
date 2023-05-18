@@ -7,9 +7,12 @@
 hook=$1
 
 # Get a list of scripts to run sequencially for this hook
-SCRIPTS=$(php artisan git-hooks:scripts "$hook")
+SCRIPTS=$(./vendor/bin/whisky scripts "$hook")
+
+# Make newlines the only separator
+IFS=$'\n'
 
 # Run each script
 for SCRIPT in $SCRIPTS; do
-    $SCRIPT
+    eval "$SCRIPT"
 done
