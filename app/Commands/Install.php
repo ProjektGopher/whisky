@@ -23,7 +23,10 @@ class Install extends Command
             return Command::FAILURE;
         }
 
-        if (! File::exists(Whisky::cwd('whisky.json'))) {
+        if (
+            ! File::exists(Whisky::cwd('whisky.json')) ||
+            $this->ask('overwrite existing whisky.json?', 'no')
+        ) {
             $this->info('Creating whisky.json in project root...');
             File::put(
                 Whisky::cwd('whisky.json'),
