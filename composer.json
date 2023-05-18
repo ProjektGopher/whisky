@@ -43,6 +43,11 @@
             "pestphp/pest-plugin": true
         }
     },
+    "scripts": {
+        "build": [
+            "@php whisky app:build whisky"
+        ]
+    },
     "minimum-stability": "stable",
     "prefer-stable": true,
     "bin": ["builds/whisky"]
