@@ -23,11 +23,13 @@ class Install extends Command
             return Command::FAILURE;
         }
 
-        $this->info('Creating whisky.json in project root...');
-        File::put(
-            Whisky::cwd('whisky.json'),
-            File::get(Whisky::base_path('stubs/whisky.json')),
-        );
+        if (! File::exists(Whisky::cwd('whisky.json'))) {
+            $this->info('Creating whisky.json in project root...');
+            File::put(
+                Whisky::cwd('whisky.json'),
+                File::get(Whisky::base_path('stubs/whisky.json')),
+            );
+        }
 
         $this->info('Installing git hooks...');
 
