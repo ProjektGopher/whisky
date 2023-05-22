@@ -11,7 +11,7 @@ class Scripts extends Command
 {
     protected $signature = 'scripts {hook}';
 
-    protected $description = 'Get a list of scripts for a given hook';
+    protected $description = 'Get a list of terminal commands for a given hook';
 
     public function handle(): int
     {
@@ -23,12 +23,7 @@ class Scripts extends Command
         }
 
         $this->getScripts($this->argument('hook'))->each(function ($script): void {
-            if (str_starts_with($script, '@')) {
-                $this->line(substr($script, 1));
-
-                return;
-            }
-            $this->line($this->buildScriptPath($script));
+            $this->line($script);
         });
 
         return Command::SUCCESS;
@@ -37,10 +32,5 @@ class Scripts extends Command
     private function getScripts(string $hook): Collection
     {
         return collect(Whisky::readConfig("hooks.{$hook}"));
-    }
-
-    private function buildScriptPath(string $script): string
-    {
-        return implode([Whisky::readConfig('scriptsDir'), DIRECTORY_SEPARATOR, $script]);
     }
 }

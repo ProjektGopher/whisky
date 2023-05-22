@@ -47,7 +47,6 @@ class Install extends Command
         });
 
         $this->info('Verifying hooks are executable...');
-        exec('chmod +x '.Whisky::readConfig('scriptsDir').'/*');
         exec('chmod +x '.Whisky::cwd('.git/hooks').'/*');
         exec('chmod +x '.Whisky::base_path('bin/run-hook'));
 
