@@ -11,7 +11,7 @@ use Phar;
 
 class Install extends Command
 {
-    protected $signature = 'install';
+    protected $signature = 'install {--verbose}';
 
     protected $description = 'Install git hooks';
 
@@ -34,11 +34,15 @@ class Install extends Command
             );
         }
 
-        $this->info('Installing git hooks...');
+        if ($this->option('verbose')) {
+            $this->info('Installing git hooks...');
+        }
 
         $this->getHooks()->each(function ($hook) {
             if ($this->hookIsDisabled($hook)) {
-                $this->warn("{$hook} git hook is disabled, skipping...");
+                if ($this->option('verbose')) {
+                    $this->warn("{$hook} git hook is disabled, skipping...");
+                }
 
                 return;
             }
@@ -46,7 +50,9 @@ class Install extends Command
             $this->installHook($hook);
         });
 
-        $this->info('Verifying hooks are executable...');
+        if ($this->option('verbose')) {
+            $this->info('Verifying hooks are executable...');
+        }
         exec('chmod +x '.Whisky::cwd('.git/hooks').'/*');
         exec('chmod +x '.Whisky::base_path('bin/run-hook'));
 
@@ -82,12 +88,16 @@ class Install extends Command
     private function installHook(string $hook): void
     {
         if (! File::exists(Whisky::cwd(".git/hooks/{$hook}"))) {
-            $this->line("{$hook} file does not exist yet, creating...");
+            if ($this->option('verbose')) {
+                $this->line("{$hook} file does not exist yet, creating...");
+            }
             File::put(Whisky::cwd(".git/hooks/{$hook}"), '#!/bin/sh'.PHP_EOL);
         }
 
         if ($this->hookIsInstalled($hook)) {
-            $this->warn("{$hook} git hook already installed, skipping...");
+            if ($this->option('verbose')) {
+                $this->warn("{$hook} git hook already installed, skipping...");
+            }
 
             return;
         }
@@ -97,6 +107,8 @@ class Install extends Command
             "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"".PHP_EOL,
         );
 
-        $this->info("{$hook} git hook installed successfully.");
+        if ($this->option('verbose')) {
+            $this->info("{$hook} git hook installed successfully.");
+        }
     }
 }
