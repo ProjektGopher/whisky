@@ -28,7 +28,7 @@ class Whisky
             : base_path($path);
     }
 
-    public static function readConfig(string $key): string|array
+    public static function readConfig(string $key): string|array|null
     {
         $path = self::cwd('whisky.json');
 
