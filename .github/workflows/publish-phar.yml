@@ -1,0 +1,56 @@
+name: Publish the released PHAR
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag release version'
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+
+    name: Release PHAR
+
+    steps:
+      - name: Extract the tag version
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            GITHUB_REF=${{ github.event.inputs.tag }}
+          fi          
+          echo "tag=${GITHUB_REF##*v}" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout the code
+        uses: actions/checkout@v3
+        with:
+          ref: v${{ steps.tag.outputs.tag }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          extensions: dom, curl, libxml, mbstring, zip
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
+          coverage: none
+
+      - name: Install the dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Create the PHAR file.
+        run: ./whisky app:build whisky.phar --build-version=${{ steps.tag.outputs.tag }}
+
+      - name: Upload the PHAR artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: whisky.phar
+          path: builds/whisky.phar
+
+      - name: Upload the PHAR to release
+        run: gh release upload v${{ steps.tag.outputs.tag }} builds/whisky.phar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
