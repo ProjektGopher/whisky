@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/ProjektGopher/whisky/raw/HEAD/art/logo.svg" width="50%" alt="Whisky Logo"></p>
+<p align="center"><img src="https://github.com/ProjektGopher/whisky/raw/HEAD/art/logo.svg" width="90%" alt="Whisky Logo"></p>
 
 TODO: Usage example.
 
