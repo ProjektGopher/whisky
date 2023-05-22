@@ -1,13 +1,17 @@
-# Manage project-wide git hooks in a simple way
+<p align="center"><img src="https://github.com/ProjektGopher/whisky/raw/HEAD/art/logo.svg" width="50%" alt="Whisky Logo"></p>
+
+TODO: Usage example.
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/projektgopher/whisky.svg?style=flat-square)](https://packagist.org/packages/projektgopher/whisky)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/projektgopher/whisky/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/projektgopher/whisky/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/projektgopher/whisky/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/projektgopher/whisky/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/projektgopher/whisky.svg?style=flat-square)](https://packagist.org/packages/projektgopher/whisky)
 
-Keeping git hooks in sync across a whole team can have some issues. This cli tool aims to solve that.
+## Introduction
+Whisky is the simplest, **framework agnostic**, CLI tool for managing and enforcing a project's git hooks across an entire team.
 
 ## Installation
+Whisky's **only** dependency is `php^8.1`.
 
 You can install the package via composer:
 
@@ -33,11 +37,12 @@ This will create a `whisky.json` file in your project root:
 }
 ```
 
-> **Note** by adding `alias whisky=./vendor/bin/whisky` to your bash.rc file, you can shorten the length of the command.
+> **Note** by adding `alias whisky=./vendor/bin/whisky` to your `bash.rc` file, you can shorten the length of the command.
 
 ## Usage
 
-TODO
+### Skipping Hooks
+`--no-verify`, `whisky skip-once` if no-verify not available
 
 ## Testing
 
@@ -62,4 +67,3 @@ A **big** "Thank You" to [EXACTsports](https://github.com/EXACTsports) for suppo
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
