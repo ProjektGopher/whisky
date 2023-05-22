@@ -1,6 +1,6 @@
-<p align="center"><img src="https://github.com/ProjektGopher/whisky/raw/HEAD/art/logo.svg" width="90%" alt="Whisky Logo"></p>
+<p align="center"><img src="https://github.com/ProjektGopher/whisky/raw/HEAD/art/logo.svg" width="75%" alt="Whisky Logo"></p>
 
-TODO: Usage example.
+<p align="center"><img src="https://github.com/ProjektGopher/whisky/raw/HEAD/art/example.png" width="75%" alt="Whisky Terminal Example"></p>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/projektgopher/whisky.svg?style=flat-square)](https://packagist.org/packages/projektgopher/whisky)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/projektgopher/whisky/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/projektgopher/whisky/actions?query=workflow%3Arun-tests+branch%3Amain)
