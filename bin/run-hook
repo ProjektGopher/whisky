@@ -4,10 +4,24 @@
 #########################
 
 # Get the hook name from the first and only argument
-hook=$1
+HOOK=$1
+
+# Get the path to the whisky binary:
+# First, check if it's in the vendor folder.
+# If not, check the global composer folder.
+# If not, print an error message and exit.
+# This currently only supports windows when using git bash or WSL.
+if [ -f "./vendor/bin/whisky" ]; then
+    WHISKY="./vendor/bin/whisky"
+elif [ -f "$(composer -n config --global home)/vendor/bin/whisky" ]; then
+    WHISKY=$(composer -n config --global home)/vendor/bin/whisky
+else
+    printf "Whisky not found. Please run 'composer install' to install it.\n"
+    exit 1
+fi
 
 # Get a list of scripts to run sequencially for this hook
-SCRIPTS=$(./vendor/bin/whisky scripts "$hook")
+SCRIPTS=$($WHISKY scripts "$HOOK")
 
 # Make newlines the only separator
 IFS=$'\n'
