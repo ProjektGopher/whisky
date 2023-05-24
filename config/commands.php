@@ -5,6 +5,7 @@ use App\Commands\Scripts;
 use App\Commands\SkipOnce;
 use App\Commands\GetRunCmd;
 use App\Commands\Uninstall;
+use App\Commands\Update;
 
 return [
 
@@ -51,6 +52,7 @@ return [
         Scripts::class,
         SkipOnce::class,
         Uninstall::class,
+        Update::class,
     ],
 
     /*
