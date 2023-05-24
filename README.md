@@ -78,12 +78,12 @@ you to run scripts written in _any_ language.
 
 ```js
 // whisky.json
-...
-    "pre-push": [
-      "composer lint",
-      "rustc ./scripts/complicated_thing.rs"
-    ]
-...
+// ...
+  "pre-push": [
+    "composer lint",
+    "rustc ./scripts/complicated_thing.rs"
+  ]
+// ...
 ```
 
 > **Note** When doing this, make sure any scripts referenced are **executable**:
