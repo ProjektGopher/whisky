@@ -9,7 +9,9 @@
 
 
 ## Introduction
-Whisky is the simplest, **framework agnostic**, CLI tool for managing and enforcing a project's git hooks across an entire team.
+Whisky is the simplest, **framework agnostic**, CLI tool for managing and enforcing a php project's git hooks across an entire team.
+
+Git hooks are a fantastic tool to ensure that code hitting version control satisfies your org's code quality standards. However, `.git/hooks` is not included in your git tree. This makes it impractical to have all contributors to a repository use the same checks with the same settings.
 
 
 ## Installation
@@ -22,9 +24,11 @@ composer require --dev projektgopher/whisky
 ./vendor/bin/whisky install
 ```
 
-> **Note** Whisky does **not** currently work as expected when installed _globally_.
+> **Note** It is recommended to only require Whisky on a project level, as it does not **currently** work as expected when installed _globally_.
 
-This will create a `whisky.json` file in your project root:
+
+## Usage
+The `install` command will create a `whisky.json` file in your project root:
 
 ```json
 {
@@ -40,47 +44,16 @@ This will create a `whisky.json` file in your project root:
 }
 ```
 
-
-## Usage
 For a complete list of supported git hooks, see the [Git Documentation](https://git-scm.com/docs/githooks#_hooks).
 
-Each item under a given hook will be execuated in order as-is in the terminal.
-For anything more complicated than simple terminal commands it's recommended to create a
-`scripts` directory in your project root, and reference those here instad.
+Adding or removing any **hooks** (_not_ individual commands) to your `whisky.json` file should be followed by `./vendor/bin/whisky update` to ensure that these changes are reflected in your `.git/hooks` directory.
 
-```sh
-# ./scripts/git-add-staged
-#!/bin/bash
-
-# Create a list of all staged files
-# filter out deleted files
-STAGED_FILES=$(git diff --name-only --cached --diff-filter=d)
-
-# Pass that list of files to the following commands
-if [ -n "$STAGED_FILES" ]; then
-    # Re-stage the files that were just linted
-    git add $STAGED_FILES
-fi
-```
-
-```json
-// whisky.json
-...
-    "pre-push": [
-      "composer lint",
-      "./scripts/git-add-staged"
-    ]
-...
-```
-
-> **Note** When doing this, make sure any scripts referenced are **executable**:
-```bash
-chmod +x ./scripts/*
-```
+> **Warning** all hooks are **evaluated as-is** in the terminal. Keep this in mind when committing anything involving changes to your `whisky.json`.
 
 ### Skipping Hooks
-Sometimes you need to commit or push changes without running your git hooks, like when handing off work to another computer.
-This can usually be done using git's _native_ `--no-verify` flag.
+Sometimes you need to commit or push changes without running your git hooks,
+like when handing off work to another computer. This can usually be done
+using git's _native_ `--no-verify` flag.
 ```bash
 git commit -m "wip" --no-verify
 ```
@@ -97,11 +70,26 @@ In this case, running the following command will have the exact same effect.
 Adding a hook's name to the `disabled` array in your `whisky.json` will disable the hook from running.
 This can be useful when building out a workflow that isn't ready for the rest of the team yet.
 
-> **Note** The `disabled` array is only read on _installation_, therefor any changes **must** be followed by `./vendor/bin/whisky install`.
 
+## Advanced Usage
+For anything more complicated than simple terminal commands it's recommended to create a
+`scripts` directory in your project root. This comes with the added benefit of allowing
+you to run scripts written in _any_ language.
 
-## Security
-> **Warning** all hooks are **evaluated as-is** in the terminal. Keep this in mind when committing anything involving changes to your `whisky.json`.
+```js
+// whisky.json
+...
+    "pre-push": [
+      "composer lint",
+      "rustc ./scripts/complicated_thing.rs"
+    ]
+...
+```
+
+> **Note** When doing this, make sure any scripts referenced are **executable**:
+```bash
+chmod +x ./scripts/*
+```
 
 
 ## Testing
