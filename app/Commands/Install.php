@@ -39,14 +39,6 @@ class Install extends Command
         }
 
         $this->getHooks()->each(function ($hook) {
-            if ($this->hookIsDisabled($hook)) {
-                if ($this->option('verbose')) {
-                    $this->warn("{$hook} git hook is disabled, skipping...");
-                }
-
-                return;
-            }
-
             $this->installHook($hook);
         });
 
@@ -69,12 +61,6 @@ class Install extends Command
     private function getHooks(): Collection
     {
         return collect(array_keys(Whisky::readConfig('hooks')));
-    }
-
-    private function hookIsDisabled(string $hook): bool
-    {
-        return in_array($hook, Whisky::readConfig('disabled'));
-        // return collect(config('git-hooks.disabled'))->contains($hook);
     }
 
     private function hookIsInstalled(string $hook): bool
