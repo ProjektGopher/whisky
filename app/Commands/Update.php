@@ -15,7 +15,7 @@ use LaravelZero\Framework\Commands\Command;
  */
 class Update extends Command
 {
-    protected $signature = 'update {--verbose}';
+    protected $signature = 'update';
 
     protected $description = 'Update git hooks';
 

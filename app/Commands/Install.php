@@ -11,7 +11,7 @@ use Phar;
 
 class Install extends Command
 {
-    protected $signature = 'install {--verbose}';
+    protected $signature = 'install';
 
     protected $description = 'Install git hooks';
 
