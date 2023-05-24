@@ -24,6 +24,11 @@ class GetRunCmd extends Command
             return Command::SUCCESS;
         }
 
+        // Check if the hook is disabled in whisky.json
+        if (in_array($this->argument('hook'), Whisky::readConfig('hooks.disabled'))) {
+            return Command::SUCCESS;
+        }
+
         $this->line(Whisky::base_path("bin/run-hook {$this->argument('hook')}"));
 
         return Command::SUCCESS;

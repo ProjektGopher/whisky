@@ -7,55 +7,56 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
-use Phar;
 
-class Install extends Command
+/**
+ * TODO: This command has a lot of duplication.
+ * Most of this can live on the Whisky class,
+ * and some should be in a new Hook class.
+ */
+class Update extends Command
 {
-    protected $signature = 'install {--verbose}';
+    protected $signature = 'update {--verbose}';
 
-    protected $description = 'Install git hooks';
+    protected $description = 'Update git hooks';
 
     public function handle(): int
     {
-        if (! $this->gitIsInitialized()) {
-            $this->error('Git has not been initialized in this project, aborting...');
 
-            return Command::FAILURE;
-        }
-
-        if (
-            ! File::exists(Whisky::cwd('whisky.json')) ||
-            $this->ask('overwrite existing whisky.json?', 'no')
-        ) {
-            $this->info('Creating whisky.json in project root...');
-            File::put(
-                Whisky::cwd('whisky.json'),
-                File::get(Whisky::base_path('stubs/whisky.json')),
-            );
-        }
-
-        if ($this->option('verbose')) {
-            $this->info('Installing git hooks...');
-        }
-
+        $this->uninstall();
+        
         $this->getHooks()->each(function ($hook) {
             $this->installHook($hook);
         });
 
-        if ($this->option('verbose')) {
-            $this->info('Verifying hooks are executable...');
-        }
-        exec('chmod +x '.Whisky::cwd('.git/hooks').'/*');
-        exec('chmod +x '.Whisky::base_path('bin/run-hook'));
-
-        $this->info('Git hooks installed successfully.');
+        $this->line('done.');
 
         return Command::SUCCESS;
     }
 
-    private function gitIsInitialized(): bool
+    private function uninstall(): void
     {
-        return File::exists(Whisky::cwd('.git'));
+        collect(
+          File::files(Whisky::cwd('.git/hooks'))
+        )->filter( fn ($file) => 
+          ! str_ends_with($file->getFilename(), 'sample')
+        )->each(function ($file): void {
+          $path = $file->getPathname();
+          $hook = $file->getFilename();
+          $contents = File::get($path);
+          $command = "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"".PHP_EOL;
+
+          if (! str_contains($contents, $command)) {
+            return;
+          }
+
+          $contents = str_replace(
+            $command,
+            '',
+            File::get($path),
+          );
+          File::put($path, $contents);
+          $this->info("Removed Whisky from {$hook} hook.");
+        });
     }
 
     private function getHooks(): Collection
