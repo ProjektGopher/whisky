@@ -39,7 +39,7 @@ class Uninstall extends Command
 
       if (
         $this->option('json') ||
-        $this->ask('Would you also like to remove whisky.json?', 'yes')
+        $this->confirm('Would you also like to remove whisky.json?')
       ) {
         File::delete(Whisky::cwd('whisky.json'));
         $this->info('whisky.json removed.');
