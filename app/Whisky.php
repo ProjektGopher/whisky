@@ -15,6 +15,7 @@ class Whisky
     public static function cwd(string $path = ''): string
     {
         if ($path) {
+            $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
             return getcwd() . DIRECTORY_SEPARATOR . $path;
         }
 
@@ -23,9 +24,15 @@ class Whisky
 
     public static function base_path(string $path = ''): string
     {
-        return Phar::running()
+        if (! Phar::running()) {
+            return base_path($path);
+        }
+
+        $path = File::exists(Whisky::cwd("vendor/bin/whisky"))
             ? Whisky::cwd("vendor/projektgopher/whisky/{$path}")
-            : base_path($path);
+            : self::getGlobalComposerHome().'/vendor/projektgopher/whisky/'.$path;
+
+        return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 
     public static function readConfig(string $key): string|array|null
@@ -35,5 +42,10 @@ class Whisky
         $cfg = json_decode(File::get($path), true);
 
         return data_get($cfg, $key);
+    }
+
+    public static function getGlobalComposerHome(): string
+    {
+        return rtrim(shell_exec('composer -n config --global home'), "\n");
     }
 }
