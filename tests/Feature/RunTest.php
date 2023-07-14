@@ -13,7 +13,7 @@ it('deletes skip-once file if exists and outputs nothing', function () {
         ->with(__DIR__.'/../../bin/skip-once')
         ->andReturnTrue();
 
-    $this->artisan('git-hooks:get-run-cmd pre-commit')
+    $this->artisan('get-run-cmd pre-commit')
         ->doesntExpectOutputToContain('run-hook')
         ->assertExitCode(0);
 });
