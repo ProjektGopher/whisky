@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Commands;
+namespace Whisky\Commands;
 
-use App\Whisky;
+use Whisky\Whisky;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
 

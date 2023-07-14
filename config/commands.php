@@ -1,11 +1,11 @@
 <?php
 
-use App\Commands\Install;
-use App\Commands\Scripts;
-use App\Commands\SkipOnce;
-use App\Commands\GetRunCmd;
-use App\Commands\Uninstall;
-use App\Commands\Update;
+use Whisky\Commands\Install;
+use Whisky\Commands\Scripts;
+use Whisky\Commands\SkipOnce;
+use Whisky\Commands\GetRunCmd;
+use Whisky\Commands\Uninstall;
+use Whisky\Commands\Update;
 
 return [
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Whisky;
 
 use Phar;
 use Illuminate\Support\Facades\File;

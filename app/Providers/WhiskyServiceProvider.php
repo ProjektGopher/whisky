@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Providers;
+namespace Whisky\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class WhiskyServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
