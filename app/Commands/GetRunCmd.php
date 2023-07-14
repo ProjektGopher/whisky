@@ -18,7 +18,6 @@ class GetRunCmd extends Command
 
     public function handle(): int
     {
-        dd(Whisky::base_path('bin/skip-once'), File::exists(Whisky::base_path('bin/skip-once')));
         if (File::exists(Whisky::base_path('bin/skip-once'))) {
             File::delete(Whisky::base_path('bin/skip-once'));
 
