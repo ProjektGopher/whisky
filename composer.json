@@ -54,6 +54,9 @@
     "scripts": {
         "build": [
             "@php whisky app:build whisky"
+        ],
+        "test": [
+            "@php whisky test"
         ]
     },
     "minimum-stability": "stable",
