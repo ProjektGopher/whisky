@@ -5,3 +5,5 @@
 .phpunit.result.cache
 scratch.md
 .DS_Store
+.env
+whisky.json
