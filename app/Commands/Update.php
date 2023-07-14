@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Commands;
+namespace Whisky\Commands;
 
-use App\Whisky;
+use Whisky\Whisky;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
@@ -23,7 +23,7 @@ class Update extends Command
     {
 
         $this->uninstall();
-        
+
         $this->getHooks()->each(function ($hook) {
             $this->installHook($hook);
         });
@@ -36,26 +36,27 @@ class Update extends Command
     private function uninstall(): void
     {
         collect(
-          File::files(Whisky::cwd('.git/hooks'))
-        )->filter( fn ($file) => 
+            File::files(Whisky::cwd('.git/hooks'))
+        )->filter(
+            fn ($file) =>
           ! str_ends_with($file->getFilename(), 'sample')
         )->each(function ($file): void {
-          $path = $file->getPathname();
-          $hook = $file->getFilename();
-          $contents = File::get($path);
-          $command = "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"".PHP_EOL;
+            $path = $file->getPathname();
+            $hook = $file->getFilename();
+            $contents = File::get($path);
+            $command = "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"".PHP_EOL;
 
-          if (! str_contains($contents, $command)) {
-            return;
-          }
+            if (! str_contains($contents, $command)) {
+                return;
+            }
 
-          $contents = str_replace(
-            $command,
-            '',
-            File::get($path),
-          );
-          File::put($path, $contents);
-          $this->info("Removed Whisky from {$hook} hook.");
+            $contents = str_replace(
+                $command,
+                '',
+                File::get($path),
+            );
+            File::put($path, $contents);
+            $this->info("Removed Whisky from {$hook} hook.");
         });
     }
 

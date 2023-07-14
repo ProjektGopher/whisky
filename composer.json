@@ -1,7 +1,15 @@
 {
     "name": "projektgopher/whisky",
     "description": "A simple CLI tool for managing a project's git hooks across multiple members.",
-    "keywords": ["git", "hooks", "cli", "laravel", "php", "projektgopher", "whisky"],
+    "keywords": [
+        "git",
+        "hooks",
+        "cli",
+        "laravel",
+        "php",
+        "projektgopher",
+        "whisky"
+    ],
     "homepage": "https://github.com/ProjektGopher/whisky",
     "type": "project",
     "license": "MIT",
@@ -27,7 +35,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "Whisky\\": "app/"
         }
     },
     "autoload-dev": {
@@ -50,5 +58,7 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "bin": ["builds/whisky"]
+    "bin": [
+        "builds/whisky"
+    ]
 }

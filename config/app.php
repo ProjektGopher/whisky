@@ -67,6 +67,6 @@ return [
     */
 
     'providers' => [
-        App\Providers\AppServiceProvider::class,
+        Whisky\Providers\AppServiceProvider::class,
     ],
 ];

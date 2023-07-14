@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Whisky\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

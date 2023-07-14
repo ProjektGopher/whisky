@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Commands;
+namespace Whisky\Commands;
 
-use App\Whisky;
+use Whisky\Whisky;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
