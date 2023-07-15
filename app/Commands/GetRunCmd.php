@@ -2,9 +2,9 @@
 
 namespace Whisky\Commands;
 
-use Whisky\Whisky;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
+use Whisky\Whisky;
 
 /**
  * This command is basically only needed to build the execution path

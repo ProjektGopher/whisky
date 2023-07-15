@@ -2,12 +2,11 @@
 
 namespace Whisky\Commands;
 
-use Whisky\Whisky;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
-use Phar;
+use Whisky\Whisky;
 
 class Install extends Command
 {

@@ -2,11 +2,11 @@
 
 namespace Whisky\Commands;
 
-use Whisky\Whisky;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
+use Whisky\Whisky;
 
 /**
  * TODO: This command has a lot of duplication.
@@ -38,8 +38,7 @@ class Update extends Command
         collect(
             File::files(Whisky::cwd('.git/hooks'))
         )->filter(
-            fn ($file) =>
-          ! str_ends_with($file->getFilename(), 'sample')
+            fn ($file) => ! str_ends_with($file->getFilename(), 'sample')
         )->each(function ($file): void {
             $path = $file->getPathname();
             $hook = $file->getFilename();
