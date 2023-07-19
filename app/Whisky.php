@@ -56,4 +56,14 @@ class Whisky
 
         return data_get($cfg, $key);
     }
+
+    protected function determineQuote(): string
+    {
+        return $this->isWindows() ? '"' : "'";
+    }
+
+    protected function isWindows(): bool
+    {
+        return str_starts_with(strtoupper(PHP_OS), 'WIN');
+    }
 }

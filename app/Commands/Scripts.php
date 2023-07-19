@@ -2,9 +2,9 @@
 
 namespace ProjektGopher\Whisky\Commands;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
+use ProjektGopher\Whisky\Hook;
 use ProjektGopher\Whisky\Whisky;
 
 class Scripts extends Command
@@ -22,15 +22,10 @@ class Scripts extends Command
             return Command::FAILURE;
         }
 
-        $this->getScripts($this->argument('hook'))->each(function ($script): void {
+        Hook::make($this->argument('hook'))->getScripts()->each(function ($script): void {
             $this->line($script);
         });
 
         return Command::SUCCESS;
-    }
-
-    private function getScripts(string $hook): Collection
-    {
-        return collect(Whisky::readConfig("hooks.{$hook}"));
     }
 }
