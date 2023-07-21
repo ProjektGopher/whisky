@@ -64,9 +64,15 @@ class Install extends Command
 
     private function hookIsInstalled(string $hook): bool
     {
+        $bin = Whisky::bin();
+
         return Str::contains(
             File::get(Whisky::cwd(".git/hooks/{$hook}")),
-            "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"",
+            [
+                "eval \"$({$bin} get-run-cmd {$hook})\"",
+                // TODO: legacy - handle upgrade somehow
+                "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"",
+            ],
         );
     }
 
@@ -87,9 +93,10 @@ class Install extends Command
             return;
         }
 
+        $bin = Whisky::bin();
         File::append(
             Whisky::cwd(".git/hooks/{$hook}"),
-            "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"".PHP_EOL,
+            "eval \"$({$bin} get-run-cmd {$hook})\"".PHP_EOL,
         );
 
         if ($this->option('verbose')) {
