@@ -30,9 +30,6 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Install composer dependencies
-        env:
-          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
-        run: |
-          composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Larastan
-        run: ./vendor/bin/phpstan analyse
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Stan
+        run: composer stan

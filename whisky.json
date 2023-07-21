@@ -2,10 +2,11 @@
     "disabled": [],
     "hooks": {
         "pre-commit": [
-            "composer lint",
-            "composer pint --dirty"
+            "composer lint -- --test"
         ],
         "pre-push": [
+            "composer lint -- --test",
+            "composer stan",
             "composer test"
         ]
     }
