@@ -36,7 +36,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Whisky\\": "app/"
+            "ProjektGopher\\Whisky\\": "app/"
         }
     },
     "autoload-dev": {

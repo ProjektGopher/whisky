@@ -1,10 +1,10 @@
 <?php
 
-namespace Whisky\Commands;
+namespace ProjektGopher\Whisky\Commands;
 
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
-use Whisky\Whisky;
+use ProjektGopher\Whisky\Whisky;
 
 /**
  * This command is basically only needed to build the execution path

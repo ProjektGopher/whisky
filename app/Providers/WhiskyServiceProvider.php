@@ -1,6 +1,6 @@
 <?php
 
-namespace Whisky\Providers;
+namespace ProjektGopher\Whisky\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace Whisky\Commands;
+namespace ProjektGopher\Whisky\Commands;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
-use Whisky\Whisky;
+use ProjektGopher\Whisky\Whisky;
 
 class Install extends Command
 {

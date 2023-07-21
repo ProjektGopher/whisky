@@ -1,11 +1,11 @@
 <?php
 
-namespace Whisky\Commands;
+namespace ProjektGopher\Whisky\Commands;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
-use Whisky\Whisky;
+use ProjektGopher\Whisky\Whisky;
 
 class Scripts extends Command
 {
