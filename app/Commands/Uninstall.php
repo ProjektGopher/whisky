@@ -2,9 +2,9 @@
 
 namespace Whisky\Commands;
 
-use Whisky\Whisky;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
+use Whisky\Whisky;
 
 class Uninstall extends Command
 {
@@ -17,8 +17,7 @@ class Uninstall extends Command
         collect(
             File::files(Whisky::cwd('.git/hooks'))
         )->filter(
-            fn ($file) =>
-        ! str_ends_with($file->getFilename(), 'sample')
+            fn ($file) => ! str_ends_with($file->getFilename(), 'sample')
         )->each(function ($file): void {
             $path = $file->getPathname();
             $hook = $file->getFilename();

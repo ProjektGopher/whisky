@@ -1,9 +1,9 @@
 <?php
 
+use Whisky\Commands\GetRunCmd;
 use Whisky\Commands\Install;
 use Whisky\Commands\Scripts;
 use Whisky\Commands\SkipOnce;
-use Whisky\Commands\GetRunCmd;
 use Whisky\Commands\Uninstall;
 use Whisky\Commands\Update;
 
@@ -75,7 +75,6 @@ return [
         Illuminate\Console\Scheduling\ScheduleFinishCommand::class,
         Illuminate\Foundation\Console\VendorPublishCommand::class,
         LaravelZero\Framework\Commands\StubPublishCommand::class,
-
 
         GetRunCmd::class,
     ],

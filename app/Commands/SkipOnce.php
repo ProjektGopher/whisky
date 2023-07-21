@@ -2,9 +2,9 @@
 
 namespace Whisky\Commands;
 
-use Whisky\Whisky;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
+use Whisky\Whisky;
 
 class SkipOnce extends Command
 {

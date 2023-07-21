@@ -2,10 +2,10 @@
 
 namespace Whisky\Commands;
 
-use Whisky\Whisky;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
+use Whisky\Whisky;
 
 class Scripts extends Command
 {

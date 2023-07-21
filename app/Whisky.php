@@ -2,8 +2,8 @@
 
 namespace Whisky;
 
-use Phar;
 use Illuminate\Support\Facades\File;
+use Phar;
 
 class Whisky
 {
@@ -15,7 +15,7 @@ class Whisky
     public static function cwd(string $path = ''): string
     {
         if ($path) {
-            return getcwd() . DIRECTORY_SEPARATOR . $path;
+            return getcwd().DIRECTORY_SEPARATOR.$path;
         }
 
         return getcwd();
