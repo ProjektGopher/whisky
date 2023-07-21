@@ -1,11 +1,6 @@
 <?php
 
-use Whisky\Commands\GetRunCmd;
-use Whisky\Commands\Install;
-use Whisky\Commands\Scripts;
-use Whisky\Commands\SkipOnce;
-use Whisky\Commands\Uninstall;
-use Whisky\Commands\Update;
+use ProjektGopher\Whisky\Commands;
 
 return [
 
@@ -47,12 +42,12 @@ return [
     */
 
     'add' => [
-        Install::class,
-        GetRunCmd::class,
-        Scripts::class,
-        SkipOnce::class,
-        Uninstall::class,
-        Update::class,
+        Commands\Install::class,
+        Commands\GetRunCmd::class,
+        Commands\Scripts::class,
+        Commands\SkipOnce::class,
+        Commands\Uninstall::class,
+        Commands\Update::class,
     ],
 
     /*
@@ -76,7 +71,7 @@ return [
         Illuminate\Foundation\Console\VendorPublishCommand::class,
         LaravelZero\Framework\Commands\StubPublishCommand::class,
 
-        GetRunCmd::class,
+        Commands\GetRunCmd::class,
     ],
 
     /*

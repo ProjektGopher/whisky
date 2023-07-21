@@ -1,6 +1,6 @@
 <?php
 
-namespace Whisky;
+namespace ProjektGopher\Whisky;
 
 use Illuminate\Support\Facades\File;
 use Phar;

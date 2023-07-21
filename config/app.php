@@ -67,6 +67,6 @@ return [
     */
 
     'providers' => [
-        Whisky\Providers\WhiskyServiceProvider::class,
+        ProjektGopher\Whisky\Providers\WhiskyServiceProvider::class,
     ],
 ];
