@@ -21,6 +21,26 @@ class Whisky
         return getcwd();
     }
 
+    public static function bin(): string
+    {
+        return match (true) {
+            self::dogfooding() => self::cwd('whisky'),
+            self::isRunningGlobally() => '/usr/local/bin/whisky', // TODO
+            default => self::cwd('vendor/bin/whisky'),
+        };
+    }
+
+    public static function dogfooding(): bool
+    {
+        return self::cwd() === self::base_path();
+    }
+
+    // TODO
+    public static function isRunningGlobally(): bool
+    {
+        return false;
+    }
+
     public static function base_path(string $path = ''): string
     {
         return Phar::running()

@@ -3,6 +3,7 @@
 namespace ProjektGopher\Whisky\Commands;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 use ProjektGopher\Whisky\Whisky;
 
@@ -19,17 +20,22 @@ class Uninstall extends Command
         )->filter(
             fn ($file) => ! str_ends_with($file->getFilename(), 'sample')
         )->each(function ($file): void {
+            $bin = Whisky::bin();
             $path = $file->getPathname();
             $hook = $file->getFilename();
             $contents = File::get($path);
-            $command = "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"".PHP_EOL;
+            $commands = [
+                "eval \"$({$bin} get-run-cmd {$hook})\"".PHP_EOL,
+                // TODO: legacy - handle upgrade somehow
+                "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"".PHP_EOL,
+            ];
 
-            if (! str_contains($contents, $command)) {
+            if (! Str::contains($contents, $commands)) {
                 return;
             }
 
             $contents = str_replace(
-                $command,
+                $commands,
                 '',
                 File::get($path),
             );
