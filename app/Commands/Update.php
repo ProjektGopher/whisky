@@ -21,7 +21,6 @@ class Update extends Command
 
     public function handle(): int
     {
-
         $this->uninstall();
 
         $this->getHooks()->each(function ($hook) {

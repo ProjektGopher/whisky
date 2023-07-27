@@ -2,10 +2,9 @@
 
 namespace ProjektGopher\Whisky\Commands;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
+use ProjektGopher\Whisky\Hook;
 use ProjektGopher\Whisky\Whisky;
 
 class Install extends Command
@@ -37,8 +36,30 @@ class Install extends Command
             $this->info('Installing git hooks...');
         }
 
-        $this->getHooks()->each(function ($hook) {
-            $this->installHook($hook);
+        /**
+         * Do the hook installation, and talk about it.
+         */
+        Hook::each(function (Hook $hook): void {
+            if ($hook->isNotEnabled()) {
+                if ($this->option('verbose')) {
+                    $this->line("{$hook->name} file does not exist yet, creating...");
+                }
+                $hook->enable();
+            }
+
+            if ($hook->isInstalled()) {
+                if ($this->option('verbose')) {
+                    $this->warn("{$hook->name} git hook already installed, skipping...");
+                }
+
+                return;
+            }
+
+            $hook->install();
+
+            if ($this->option('verbose')) {
+                $this->info("{$hook->name} git hook installed successfully.");
+            }
         });
 
         if ($this->option('verbose')) {
@@ -55,52 +76,5 @@ class Install extends Command
     private function gitIsInitialized(): bool
     {
         return File::exists(Whisky::cwd('.git'));
-    }
-
-    private function getHooks(): Collection
-    {
-        return collect(array_keys(Whisky::readConfig('hooks')));
-    }
-
-    private function hookIsInstalled(string $hook): bool
-    {
-        $bin = Whisky::bin();
-
-        return Str::contains(
-            File::get(Whisky::cwd(".git/hooks/{$hook}")),
-            [
-                "eval \"$({$bin} get-run-cmd {$hook})\"",
-                // TODO: legacy - handle upgrade somehow
-                "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"",
-            ],
-        );
-    }
-
-    private function installHook(string $hook): void
-    {
-        if (! File::exists(Whisky::cwd(".git/hooks/{$hook}"))) {
-            if ($this->option('verbose')) {
-                $this->line("{$hook} file does not exist yet, creating...");
-            }
-            File::put(Whisky::cwd(".git/hooks/{$hook}"), '#!/bin/sh'.PHP_EOL);
-        }
-
-        if ($this->hookIsInstalled($hook)) {
-            if ($this->option('verbose')) {
-                $this->warn("{$hook} git hook already installed, skipping...");
-            }
-
-            return;
-        }
-
-        $bin = Whisky::bin();
-        File::append(
-            Whisky::cwd(".git/hooks/{$hook}"),
-            "eval \"$({$bin} get-run-cmd {$hook})\"".PHP_EOL,
-        );
-
-        if ($this->option('verbose')) {
-            $this->info("{$hook} git hook installed successfully.");
-        }
     }
 }

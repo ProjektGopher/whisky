@@ -50,20 +50,8 @@ class Whisky
 
     public static function readConfig(string $key): string|array|null
     {
-        $path = self::cwd('whisky.json');
-
-        $cfg = json_decode(File::get($path), true);
+        $cfg = File::json(static::cwd('whisky.json'));
 
         return data_get($cfg, $key);
-    }
-
-    protected function determineQuote(): string
-    {
-        return $this->isWindows() ? '"' : "'";
-    }
-
-    protected function isWindows(): bool
-    {
-        return str_starts_with(strtoupper(PHP_OS), 'WIN');
     }
 }

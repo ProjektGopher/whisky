@@ -5,12 +5,16 @@ namespace ProjektGopher\Whisky;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class Hook
 {
+    public string $name;
+
     public function __construct(
         public string $hook,
     ) {
+        $this->name = $hook;
     }
 
     public static function make(string $hook): Hook
@@ -18,9 +22,16 @@ class Hook
         return new Hook($hook);
     }
 
-    public function install(): void
+    public static function all(): Collection
     {
-        throw new Exception('Not implemented');
+        return collect(array_keys(Whisky::readConfig('hooks')))->map(
+            fn ($hook) => new Hook($hook),
+        );
+    }
+
+    public static function each(callable $callable): Collection
+    {
+        return self::all()->each($callable);
     }
 
     public function uninstall(): void
@@ -39,21 +50,48 @@ class Hook
         return File::exists(Whisky::cwd(".git/hooks/{$this->hook}"));
     }
 
+    /**
+     * Checks if the hook is enabled in git.
+     */
+    public function isEnabled(): bool
+    {
+        return $this->fileExists();
+    }
+
+    public function isNotEnabled(): bool
+    {
+        return ! $this->isEnabled();
+    }
+
+    public function enable(): void
+    {
+        File::put(Whisky::cwd(".git/hooks/{$this->hook}"), '#!/bin/sh'.PHP_EOL);
+    }
+
+    /**
+     * Checks if the hook uses Whisky.
+     */
     public function isInstalled(): bool
     {
-        throw new Exception('Not implemented');
-        // return collect(
-        //     File::files(Whisky::cwd('.git/hooks'))
-        // )->filter( fn ($file) =>
-        //     ! str_ends_with($file->getFilename(), 'sample')
-        // )->contains(function ($file): bool {
-        //     $path = $file->getPathname();
-        //     $hook = $file->getFilename();
-        //     $contents = File::get($path);
-        //     $command = "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"".PHP_EOL;
+        $bin = Whisky::bin();
 
-        //     return str_contains($contents, $command);
-        // });
+        return Str::contains(
+            File::get(Whisky::cwd(".git/hooks/{$this->hook}")),
+            [
+                "eval \"$({$bin} get-run-cmd {$this->hook})\"",
+                // TODO: legacy - handle upgrade somehow
+                "eval \"$(./vendor/bin/whisky get-run-cmd {$this->hook})\"",
+            ],
+        );
+    }
+
+    public function install(): void
+    {
+        $bin = Whisky::bin();
+        File::append(
+            Whisky::cwd(".git/hooks/{$this->hook}"),
+            "eval \"$({$bin} get-run-cmd {$this->hook})\"".PHP_EOL,
+        );
     }
 
     public function isDisabled(): bool
