@@ -9,7 +9,7 @@ jobs:
           - ubuntu-latest
         php-version:
           - "8.2"
-    name: php ${{ matrix.php-version }} on ${{ matrix.operating-system }}
+    name: Larastan ${{ matrix.php-version }} on ${{ matrix.operating-system }}
     runs-on: ${{ matrix.operating-system }}
     steps:
       - name: Checkout
