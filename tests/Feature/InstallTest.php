@@ -11,7 +11,7 @@ it('has an install command', function () {
 it('fails if git is not initialized', function () {
     File::shouldReceive('exists')
         ->once()
-        ->with(base_path('.git'))
+        ->with(normalizePath(base_path('.git')))
         ->andReturnFalse();
 
     $this->artisan('install')
