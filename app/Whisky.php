@@ -15,19 +15,19 @@ class Whisky
     public static function cwd(string $path = ''): string
     {
         if ($path) {
-            return getcwd().DIRECTORY_SEPARATOR.$path;
+            return Whisky::normalizePath(getcwd().'/'.$path);
         }
 
-        return getcwd();
+        return Whisky::normalizePath(getcwd());
     }
 
     public static function bin(): string
     {
-        return match (true) {
+        return Whisky::normalizePath(match (true) {
             self::dogfooding() => self::cwd('whisky'),
             self::isRunningGlobally() => '/usr/local/bin/whisky', // TODO
             default => self::cwd('vendor/bin/whisky'),
-        };
+        });
     }
 
     public static function dogfooding(): bool
@@ -43,9 +43,9 @@ class Whisky
 
     public static function base_path(string $path = ''): string
     {
-        return Phar::running()
+        return Whisky::normalizePath(Phar::running()
             ? Whisky::cwd("vendor/projektgopher/whisky/{$path}")
-            : base_path($path);
+            : base_path($path));
     }
 
     public static function readConfig(string $key): string|array|null
@@ -55,5 +55,19 @@ class Whisky
         $cfg = json_decode(File::get($path), true);
 
         return data_get($cfg, $key);
+    }
+
+    public static function normalizePath($path): string
+    {
+        if (Whisky::isWindows()) {
+            return str_replace('\\', '/', $path);
+        }
+
+        return $path;
+    }
+
+    public static function isWindows(): bool
+    {
+        return str_starts_with(strtoupper(PHP_OS), 'WIN');
     }
 }
