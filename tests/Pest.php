@@ -43,3 +43,17 @@ function something(): void
 {
     // ..
 }
+
+function normalizePath($path): string
+{
+    if (isWindows()) {
+        return str_replace('\\', '/', $path);
+    }
+
+    return $path;
+}
+
+function isWindows(): bool
+{
+    return str_starts_with(strtoupper(PHP_OS), 'WIN');
+}

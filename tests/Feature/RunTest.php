@@ -5,12 +5,12 @@ use Illuminate\Support\Facades\File;
 it('deletes skip-once file if exists and outputs nothing', function () {
     File::shouldReceive('exists')
         ->once()
-        ->with(base_path('bin/skip-once'))
+        ->with(normalizePath(base_path('bin/skip-once')))
         ->andReturnTrue();
 
     File::shouldReceive('delete')
         ->once()
-        ->with(base_path('bin/skip-once'))
+        ->with(normalizePath(base_path('bin/skip-once')))
         ->andReturnTrue();
 
     $this->artisan('get-run-cmd pre-commit')

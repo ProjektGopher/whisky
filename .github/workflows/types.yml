@@ -1,4 +1,4 @@
-name: Test
+name: Types
 on:
   - push
 jobs:
@@ -7,9 +7,7 @@ jobs:
       matrix:
         operating-system:
           - ubuntu-latest
-          - windows-latest
         php-version:
-          - "8.1"
           - "8.2"
     name: php ${{ matrix.php-version }} on ${{ matrix.operating-system }}
     runs-on: ${{ matrix.operating-system }}
@@ -33,5 +31,5 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install composer dependencies
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Run tests
-        run: php whisky test
+      - name: Get type coverage
+        run: composer types
