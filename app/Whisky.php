@@ -57,7 +57,7 @@ class Whisky
         return data_get($cfg, $key);
     }
 
-    public static function normalizePath($path): string
+    public static function normalizePath(string $path): string
     {
         if (Whisky::isWindows()) {
             return str_replace('\\', '/', $path);

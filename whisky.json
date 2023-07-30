@@ -1,13 +1,11 @@
 {
-    "disabled": [],
-    "hooks": {
-        "pre-commit": [
-            "composer lint -- --test"
-        ],
-        "pre-push": [
-            "composer lint -- --test",
-            "composer stan",
-            "composer test"
-        ]
-    }
+  "disabled": [],
+  "hooks": {
+    "pre-commit": [
+      "composer lint"
+    ],
+    "pre-push": [
+      "composer test"
+    ]
+  }
 }

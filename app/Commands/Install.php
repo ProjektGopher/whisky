@@ -37,7 +37,7 @@ class Install extends Command
             $this->info('Installing git hooks...');
         }
 
-        $this->getHooks()->each(function ($hook) {
+        $this->getHooks()->each(function (string $hook) {
             $this->installHook($hook);
         });
 
