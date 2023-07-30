@@ -65,6 +65,9 @@
         ],
         "test": [
             "@php whisky test"
+        ],
+        "types": [
+            "vendor/bin/pest --type-coverage --min=88"
         ]
     },
     "minimum-stability": "stable",
