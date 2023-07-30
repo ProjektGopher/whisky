@@ -11,7 +11,7 @@ jobs:
         php-version:
           - "8.1"
           - "8.2"
-    name: Tests ${{ matrix.php-version }} on ${{ matrix.operating-system }}
+    name: php ${{ matrix.php-version }} on ${{ matrix.operating-system }}
     runs-on: ${{ matrix.operating-system }}
     steps:
       - name: Checkout

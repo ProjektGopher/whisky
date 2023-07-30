@@ -12,7 +12,7 @@ jobs:
           - ubuntu-latest
         php-version:
           - "8.2"
-    name: Pint ${{ matrix.php-version }} on ${{ matrix.operating-system }}
+    name: php ${{ matrix.php-version }} on ${{ matrix.operating-system }}
     runs-on: ${{ matrix.operating-system }}
     steps:
       - name: Checkout
