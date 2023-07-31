@@ -25,7 +25,7 @@ class Hook
     public static function all(): Collection
     {
         return collect(array_keys(Whisky::readConfig('hooks')))->map(
-            fn ($hook) => new Hook($hook),
+            fn (string $hook) => new Hook($hook),
         );
     }
 
