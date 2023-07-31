@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 use ProjektGopher\Whisky\Whisky;
+use SplFileInfo;
 
 /**
  * TODO: This command has a lot of duplication.
@@ -23,7 +24,7 @@ class Update extends Command
     {
         $this->uninstall();
 
-        $this->getHooks()->each(function ($hook) {
+        $this->getHooks()->each(function (string $hook) {
             $this->installHook($hook);
         });
 
@@ -37,8 +38,8 @@ class Update extends Command
         collect(
             File::files(Whisky::cwd('.git/hooks'))
         )->filter(
-            fn ($file) => ! str_ends_with($file->getFilename(), 'sample')
-        )->each(function ($file): void {
+            fn (SplFileInfo $file) => ! str_ends_with($file->getFilename(), 'sample')
+        )->each(function (SplFileInfo $file): void {
             $path = $file->getPathname();
             $hook = $file->getFilename();
             $contents = File::get($path);
