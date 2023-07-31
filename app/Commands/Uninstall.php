@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 use ProjektGopher\Whisky\Whisky;
+use SplFileInfo;
 
 class Uninstall extends Command
 {
@@ -18,8 +19,8 @@ class Uninstall extends Command
         collect(
             File::files(Whisky::cwd('.git/hooks'))
         )->filter(
-            fn ($file) => ! str_ends_with($file->getFilename(), 'sample')
-        )->each(function ($file): void {
+            fn (SplFileInfo $file) => ! str_ends_with($file->getFilename(), 'sample')
+        )->each(function (SplFileInfo $file): void {
             $bin = Whisky::bin();
             $path = $file->getPathname();
             $hook = $file->getFilename();

@@ -22,7 +22,7 @@ class Scripts extends Command
             return Command::FAILURE;
         }
 
-        $this->getScripts($this->argument('hook'))->each(function ($script): void {
+        $this->getScripts($this->argument('hook'))->each(function (string $script): void {
             $this->line($script);
         });
 
