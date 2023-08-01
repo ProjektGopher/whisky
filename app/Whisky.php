@@ -38,6 +38,16 @@ class Whisky
     // TODO
     public static function isRunningGlobally(): bool
     {
+        // composer -n config --global home
+        //
+        return false;
+    }
+
+    // TODO
+    public static function isInstalledGlobally(): bool
+    {
+        // composer -n config --global home
+        // composer -n global config bin-dir --absolute --quiet
         return false;
     }
 
