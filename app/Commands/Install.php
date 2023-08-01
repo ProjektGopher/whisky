@@ -5,6 +5,7 @@ namespace ProjektGopher\Whisky\Commands;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
 use ProjektGopher\Whisky\Hook;
+use ProjektGopher\Whisky\Platform;
 use ProjektGopher\Whisky\Whisky;
 
 class Install extends Command
@@ -13,9 +14,15 @@ class Install extends Command
 
     protected $description = 'Install git hooks';
 
+    public function __construct(
+        public Platform $platform,
+    ) {
+        parent::__construct();
+    }
+
     public function handle(): int
     {
-        if (! $this->gitIsInitialized()) {
+        if ($this->platform->gitIsNotInitialized()) {
             $this->error('Git has not been initialized in this project, aborting...');
 
             return Command::FAILURE;
@@ -62,7 +69,7 @@ class Install extends Command
             }
         });
 
-        if (! Whisky::isWindows()) {
+        if ($this->platform->isNotWindows()) {
             if ($this->option('verbose')) {
                 $this->info('Verifying hooks are executable...');
             }
@@ -73,10 +80,5 @@ class Install extends Command
         $this->info('Git hooks installed successfully.');
 
         return Command::SUCCESS;
-    }
-
-    private function gitIsInitialized(): bool
-    {
-        return File::exists(Whisky::cwd('.git'));
     }
 }
