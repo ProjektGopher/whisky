@@ -95,12 +95,18 @@ chmod +x ./scripts/*
 
 ## Testing
 ```bash
+# Run test suite
 composer test
+
+# Test hook without having to make a dummy commit
+git hook run pre-commit
 ```
 
 
 ## Contributing
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+> **Note** Don't build the binary when contributing. The binary will be built when a release is tagged.
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for more details.
 
 
 ## Security Vulnerabilities
