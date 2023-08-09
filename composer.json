@@ -32,6 +32,7 @@
         "mockery/mockery": "^1.5.1",
         "nunomaduro/larastan": "^2.0",
         "nunomaduro/termwind": "^1.15.1",
+        "swaggest/json-schema": "^0.12.41",
         "pestphp/pest": "^2.5",
         "pestphp/pest-plugin-type-coverage": "^2.0"
     },
@@ -67,7 +68,7 @@
             "@php whisky test"
         ],
         "types": [
-            "vendor/bin/pest --type-coverage --min=100"
+            "php -d memory_limit=1G vendor/bin/pest --type-coverage --min=100"
         ]
     },
     "minimum-stability": "stable",
