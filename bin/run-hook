@@ -16,6 +16,12 @@ SCRIPTS=$($bin scripts "$hook")
 IFS=$'\n'
 
 # Run each script
+exit_code=0
 for SCRIPT in $SCRIPTS; do
     eval "$SCRIPT"
+    last_exit_code=$?
+    if [ $last_exit_code -ne 0 ]; then
+        exit_code=$last_exit_code
+        exit $exit_code
+    fi
 done
