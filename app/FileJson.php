@@ -85,7 +85,7 @@ class FileJson
             'additionalProperties' => false,
         ];
 
-        // git hooks
+        // TODO: Move this into const on the Hooks class.
         $availableHooks = [
             'pre-commit',
             'prepare-commit-msg',
