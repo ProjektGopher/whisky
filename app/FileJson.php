@@ -8,17 +8,15 @@ use Swaggest\JsonSchema\Schema;
 
 class FileJson
 {
-    public string $path;
-
     public function __construct(
-        public string $filePath,
+        public string $path,
     ) {
-        $this->path = $filePath;
+        //
     }
 
-    public static function make(string $filePath): FileJson
+    public static function make(string $path): FileJson
     {
-        return new FileJson($filePath);
+        return new FileJson($path);
     }
 
     public function read(bool $validate = true): string|array|null
