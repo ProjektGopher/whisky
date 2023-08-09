@@ -10,7 +10,7 @@ beforeEach(function () {
 
 it('fails if json is invalid', function ($test_json) {
     File::shouldReceive('get')
-        ->byDefault()
+        ->once()
         ->with($this->test_path)
         ->andReturn($test_json);
 
@@ -30,7 +30,7 @@ it('fails if json is invalid', function ($test_json) {
 
 it('fails if json is valid but is not an object', function ($test_json) {
     File::shouldReceive('get')
-        ->byDefault()
+        ->twice()
         ->with($this->test_path)
         ->andReturn($test_json);
 
@@ -51,7 +51,7 @@ it('fails if json is valid but is not an object', function ($test_json) {
 
 it('fails if json is valid but does not satisfy schema', function ($test_json) {
     File::shouldReceive('get')
-        ->byDefault()
+        ->twice()
         ->with($this->test_path)
         ->andReturn($test_json);
 
@@ -109,7 +109,7 @@ it('fails if json is valid but does not satisfy schema', function ($test_json) {
 
 it('validates json', function ($test_json) {
     File::shouldReceive('get')
-        ->byDefault()
+        ->twice()
         ->with($this->test_path)
         ->andReturn($test_json);
 
@@ -138,7 +138,7 @@ it('validates json', function ($test_json) {
 
 it('accepts other valid json', function ($test_json) {
     File::shouldReceive('get')
-        ->byDefault()
+        ->twice()
         ->with($this->test_path)
         ->andReturn($test_json);
 
@@ -153,9 +153,9 @@ it('accepts other valid json', function ($test_json) {
     '{ "disabled": [ "pre-commit" ], "hooks": { "pre-commit": [ "composer lint -- --test" ] } }',
 ]);
 
-it('invalid json without validation', function ($test_json) {
+it('accepts valid json with invalid schema when validation skipped', function ($test_json) {
     File::shouldReceive('get')
-        ->byDefault()
+        ->twice()
         ->with($this->test_path)
         ->andReturn($test_json);
 
