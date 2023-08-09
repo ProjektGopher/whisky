@@ -1,85 +1,65 @@
 <?php
 
+use Exception;
 use Illuminate\Support\Facades\File;
 use ProjektGopher\Whisky\FileJson;
 
-it('fails if json is invalid', function ($responseFileContent) {
+beforeEach(function () {
+    $this->test_path = '/tmp/whisky.json';
+});
 
-    $pathFile = '/tmp/whisky.json';
-
+it('fails if json is invalid', function ($test_json) {
     File::shouldReceive('get')
         ->byDefault()
-        ->with($pathFile)
-        ->andReturn($responseFileContent);
+        ->with($this->test_path)
+        ->andReturn($test_json);
 
-    $this->expectException(\Exception::class);
-    // $this->expectExceptionMessage('Invalid JSON: in '.$pathFile);
-    $this->expectExceptionMessageMatches('/Invalid JSON: .+ in '.str_replace('/', '\/', $pathFile).'/');
+    $this->expectException(Exception::class);
+    // $this->expectExceptionMessage('Invalid JSON: in '.$this->test_path);
+    $this->expectExceptionMessageMatches('/Invalid JSON: .+ in '.str_replace('/', '\/', $this->test_path).'/');
 
-    FileJson::make($pathFile)->read();
-
+    FileJson::make($this->test_path)->read();
 })->with([
-    // no json => Syntax error
-    'foo',
-    // missing quotes => Syntax error
-    '{ foo: "var" }',
-    // wrong operator => Syntax error
-    '{ "foo" = "var" }',
-    // wrong separator => Syntax error
-    '{ "foo", "var" }',
-    // trailing comma => Syntax error
-    '{ "foo": "var", "var": "foo", }',
-    // missing closing quote => Control character error, possibly incorrectly encoded
-    '{ "foo": "var }',
+    'foo',                  // no json => Syntax error
+    '{ foo: "var" }',       // missing quotes => Syntax error
+    '{ "foo" = "var" }',    // wrong operator => Syntax error
+    '{ "foo", "var" }',     // wrong separator => Syntax error
+    '{ "foo": "var", "var": "foo", }', // trailing comma => Syntax error
+    '{ "foo": "var }',      // missing closing quote => Control character error, possibly incorrectly encoded
 ]);
 
-it('fails if json is valid but not valid with schema because is not object', function ($responseFileContent) {
-
-    $pathFile = '/tmp/whisky.json';
-
+it('fails if json is valid but is not an object', function ($test_json) {
     File::shouldReceive('get')
         ->byDefault()
-        ->with($pathFile)
-        ->andReturnUsing(fn () => $responseFileContent);
+        ->with($this->test_path)
+        ->andReturn($test_json);
 
-    $this->expectException(\Exception::class);
-    // $this->expectExceptionMessage('Invalid JSON schema: in '.$pathFile);
-    $this->expectExceptionMessageMatches('/Invalid JSON schema: .+ in '.str_replace('/', '\/', $pathFile).'/');
+    $this->expectException(Exception::class);
+    // $this->expectExceptionMessage('Invalid JSON schema: in '.$this->test_path);
+    $this->expectExceptionMessageMatches('/Invalid JSON schema: .+ in '.str_replace('/', '\/', $this->test_path).'/');
 
-    $config = FileJson::make($pathFile)->read();
-
+    FileJson::make($this->test_path)->read();
 })->with([
-    // bool
-    'true',
-    // bool
-    'false',
-    // null
-    'null',
-    // string
-    '"foo"',
-    // int
-    '1',
-    // float
-    '1.1',
-    // array
-    '[]',
+    'true',     // bool
+    'false',    // bool
+    'null',     // null
+    '"foo"',    // string
+    '1',        // int
+    '1.1',      // float
+    '[]',       // array
 ]);
 
-it('fails if json is valid but not valid with schema', function ($responseFileContent) {
-
-    $pathFile = '/tmp/whisky.json';
-
+it('fails if json is valid but does not satisfy schema', function ($test_json) {
     File::shouldReceive('get')
         ->byDefault()
-        ->with($pathFile)
-        ->andReturn($responseFileContent);
+        ->with($this->test_path)
+        ->andReturn($test_json);
 
-    $this->expectException(\Exception::class);
-    // $this->expectExceptionMessage('Invalid JSON schema: in '.$pathFile);
-    $this->expectExceptionMessageMatches('/Invalid JSON schema: .+ in '.str_replace('/', '\/', $pathFile).'/');
+    $this->expectException(Exception::class);
+    // $this->expectExceptionMessage('Invalid JSON schema: in '.$this->test_path);
+    $this->expectExceptionMessageMatches('/Invalid JSON schema: .+ in '.str_replace('/', '\/', $this->test_path).'/');
 
-    $config = FileJson::make($pathFile)->read();
-
+    FileJson::make($this->test_path)->read();
 })->with([
     // empty object
     '{}',
@@ -127,77 +107,63 @@ it('fails if json is valid but not valid with schema', function ($responseFileCo
     '{ "disabled": [], "hooks": { "post-push": [ "echo post-push" ], "pre-commit": [ "composer lint -- --test" ], "pre-push": [ "composer lint -- --test", "composer stan", "composer types", "composer test" ] } }',
 ]);
 
-it('valid json', function ($responseFileContent) {
-
-    $pathFile = '/tmp/whisky.json';
-
+it('validates json', function ($test_json) {
     File::shouldReceive('get')
         ->byDefault()
-        ->with($pathFile)
-        ->andReturn($responseFileContent);
+        ->with($this->test_path)
+        ->andReturn($test_json);
 
-    $config = FileJson::make($pathFile)->read();
+    $config = FileJson::make($this->test_path)->read();
+
     expect($config)->toBeArray();
-    $disabledProperty = data_get($config, 'disabled');
-    expect($disabledProperty)->toBeArray();
-    expect($disabledProperty)->toBe([]);
-    $hooksProperty = data_get($config, 'hooks');
-    expect($hooksProperty)->toBeArray();
-    expect($hooksProperty)->toBe([
-        'pre-commit' => [
-            'composer lint -- --test',
-        ],
-        'pre-push' => [
-            'composer lint -- --test',
-            'composer stan',
-            'composer types',
-            'composer test',
-        ],
-    ]);
-
+    expect(data_get($config, 'disabled'))
+        ->toBeArray()
+        ->toBe([]);
+    expect(data_get($config, 'hooks'))
+        ->toBeArray()
+        ->toBe([
+            'pre-commit' => [
+                'composer lint -- --test',
+            ],
+            'pre-push' => [
+                'composer lint -- --test',
+                'composer stan',
+                'composer types',
+                'composer test',
+            ],
+        ]);
 })->with([
     '{ "disabled": [], "hooks": { "pre-commit": [ "composer lint -- --test" ], "pre-push": [ "composer lint -- --test", "composer stan", "composer types", "composer test" ] } }',
 ]);
 
-it('others valid json', function ($responseFileContent) {
-
-    $pathFile = '/tmp/whisky.json';
-
+it('accepts other valid json', function ($test_json) {
     File::shouldReceive('get')
         ->byDefault()
-        ->with($pathFile)
-        ->andReturn($responseFileContent);
+        ->with($this->test_path)
+        ->andReturn($test_json);
 
-    $config = FileJson::make($pathFile)->read();
+    $config = FileJson::make($this->test_path)->read();
+
     expect($config)->toBeArray();
-    $disabledProperty = data_get($config, 'disabled', []);
-    expect($disabledProperty)->toBeArray();
-    $hooksProperty = data_get($config, 'hooks', []);
-    expect($hooksProperty)->toBeArray();
-
+    expect(data_get($config, 'disabled', []))->toBeArray();
+    expect(data_get($config, 'hooks'))->toBeArray();
 })->with([
     '{ "hooks": {  } }',
     '{ "hooks": { "pre-commit": [ "composer lint -- --test" ] } }',
     '{ "disabled": [ "pre-commit" ], "hooks": { "pre-commit": [ "composer lint -- --test" ] } }',
 ]);
 
-it('invalid json without validation', function ($responseFileContent) {
-
-    $pathFile = '/tmp/whisky.json';
-
+it('invalid json without validation', function ($test_json) {
     File::shouldReceive('get')
         ->byDefault()
-        ->with($pathFile)
-        ->andReturn($responseFileContent);
+        ->with($this->test_path)
+        ->andReturn($test_json);
 
-    $config = FileJson::make($pathFile)->read(false);
+    $config = FileJson::make($this->test_path)->read(false);
+
     expect($config)->toBeArray();
-    $disabledProperty = data_get($config, 'disabled', []);
-    expect($disabledProperty)->toBeArray();
-    // expect($disabledProperty)->toBe([]);
-    $hooksProperty = data_get($config, 'hooks', []);
-    expect($hooksProperty)->toBeArray();
-
+    expect(data_get($config, 'disabled'))->toBeArray(); // ->toBe([]);
+    expect(data_get($config, 'hooks'))->toBeArray();
 })->with([
     '{ "foo": "bar", "disabled": [ "post-push" ], "hooks": { "post-push": [ "echo post-push" ], "pre-commit": { "command": "composer lint -- --test" }, "pre-push": [ "composer lint -- --test", "composer stan", "composer types", "composer test" ] } }',
 ]);
