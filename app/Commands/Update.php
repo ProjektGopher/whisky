@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
+use ProjektGopher\Whisky\Platform;
 use ProjektGopher\Whisky\Whisky;
 use SplFileInfo;
 
@@ -36,7 +37,7 @@ class Update extends Command
     private function uninstall(): void
     {
         collect(
-            File::files(Whisky::cwd('.git/hooks'))
+            File::files(Platform::cwd('.git/hooks'))
         )->filter(
             fn (SplFileInfo $file) => ! str_ends_with($file->getFilename(), 'sample')
         )->each(function (SplFileInfo $file): void {
@@ -56,7 +57,10 @@ class Update extends Command
                 File::get($path),
             );
             File::put($path, $contents);
-            $this->info("Removed Whisky from {$hook} hook.");
+
+            if ($this->option('verbose')) {
+                $this->info("Removed Whisky from {$hook} hook.");
+            }
         });
     }
 
@@ -70,18 +74,18 @@ class Update extends Command
         $bin = Whisky::bin();
 
         return Str::contains(
-            File::get(Whisky::cwd(".git/hooks/{$hook}")),
+            File::get(Platform::cwd(".git/hooks/{$hook}")),
             "eval \"$({$bin} get-run-cmd {$hook})\"",
         );
     }
 
     private function installHook(string $hook): void
     {
-        if (! File::exists(Whisky::cwd(".git/hooks/{$hook}"))) {
+        if (! File::exists(Platform::cwd(".git/hooks/{$hook}"))) {
             if ($this->option('verbose')) {
                 $this->line("{$hook} file does not exist yet, creating...");
             }
-            File::put(Whisky::cwd(".git/hooks/{$hook}"), '#!/bin/sh'.PHP_EOL);
+            File::put(Platform::cwd(".git/hooks/{$hook}"), '#!/bin/sh'.PHP_EOL);
         }
 
         if ($this->hookIsInstalled($hook)) {
@@ -94,7 +98,7 @@ class Update extends Command
 
         $bin = Whisky::bin();
         File::append(
-            Whisky::cwd(".git/hooks/{$hook}"),
+            Platform::cwd(".git/hooks/{$hook}"),
             "eval \"$({$bin} get-run-cmd {$hook})\"".PHP_EOL,
         );
 

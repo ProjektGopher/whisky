@@ -5,7 +5,7 @@ namespace ProjektGopher\Whisky\Commands;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
 use ProjektGopher\Whisky\Hook;
-use ProjektGopher\Whisky\Whisky;
+use ProjektGopher\Whisky\Platform;
 
 class Scripts extends Command
 {
@@ -15,7 +15,7 @@ class Scripts extends Command
 
     public function handle(): int
     {
-        if (File::missing(Whisky::cwd('whisky.json'))) {
+        if (File::missing(Platform::cwd('whisky.json'))) {
             $this->error('Whisky has not been initialized in this project, aborting...');
             $this->line('Run `./vendor/bin/whisky install` to initialize Whisky in this project.');
 

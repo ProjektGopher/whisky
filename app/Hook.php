@@ -47,7 +47,7 @@ class Hook
     // use ensureFileExists instead?
     public function fileExists(): bool
     {
-        return File::exists(Whisky::cwd(".git/hooks/{$this->hook}"));
+        return File::exists(Platform::cwd(".git/hooks/{$this->hook}"));
     }
 
     /**
@@ -65,7 +65,7 @@ class Hook
 
     public function enable(): void
     {
-        File::put(Whisky::cwd(".git/hooks/{$this->hook}"), '#!/bin/sh'.PHP_EOL);
+        File::put(Platform::cwd(".git/hooks/{$this->hook}"), '#!/bin/sh'.PHP_EOL);
     }
 
     /**
@@ -76,7 +76,7 @@ class Hook
         $bin = Whisky::bin();
 
         return Str::contains(
-            File::get(Whisky::cwd(".git/hooks/{$this->hook}")),
+            File::get(Platform::cwd(".git/hooks/{$this->hook}")),
             [
                 "eval \"$({$bin} get-run-cmd {$this->hook})\"",
                 // TODO: legacy - handle upgrade somehow
@@ -89,7 +89,7 @@ class Hook
     {
         $bin = Whisky::bin();
         File::append(
-            Whisky::cwd(".git/hooks/{$this->hook}"),
+            Platform::cwd(".git/hooks/{$this->hook}"),
             "eval \"$({$bin} get-run-cmd {$this->hook})\"".PHP_EOL,
         );
     }

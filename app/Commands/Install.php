@@ -29,12 +29,12 @@ class Install extends Command
         }
 
         if (
-            ! File::exists(Whisky::cwd('whisky.json')) ||
+            ! File::exists(Platform::cwd('whisky.json')) ||
             $this->confirm('overwrite existing whisky.json?', false)
         ) {
             $this->info('Creating whisky.json in project root...');
             File::put(
-                Whisky::cwd('whisky.json'),
+                Platform::cwd('whisky.json'),
                 File::get(Whisky::base_path('stubs/whisky.json')),
             );
         }
@@ -73,7 +73,7 @@ class Install extends Command
             if ($this->option('verbose')) {
                 $this->info('Verifying hooks are executable...');
             }
-            exec('chmod +x '.Whisky::cwd('.git/hooks').'/*');
+            exec('chmod +x '.Platform::cwd('.git/hooks').'/*');
             exec('chmod +x '.Whisky::base_path('bin/run-hook'));
         }
 

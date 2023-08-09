@@ -5,6 +5,7 @@ namespace ProjektGopher\Whisky\Commands;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
+use ProjektGopher\Whisky\Platform;
 use ProjektGopher\Whisky\Whisky;
 use SplFileInfo;
 
@@ -17,7 +18,7 @@ class Uninstall extends Command
     public function handle(): int
     {
         collect(
-            File::files(Whisky::cwd('.git/hooks'))
+            File::files(Platform::cwd('.git/hooks'))
         )->filter(
             fn (SplFileInfo $file) => ! str_ends_with($file->getFilename(), 'sample')
         )->each(function (SplFileInfo $file): void {
@@ -48,7 +49,7 @@ class Uninstall extends Command
             $this->option('json') ||
             $this->confirm('Would you also like to remove whisky.json?')
         ) {
-            File::delete(Whisky::cwd('whisky.json'));
+            File::delete(Platform::cwd('whisky.json'));
             $this->info('whisky.json removed.');
         }
 
