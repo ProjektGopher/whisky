@@ -2,7 +2,6 @@
 
 namespace ProjektGopher\Whisky;
 
-use Illuminate\Support\Facades\File;
 use Phar;
 
 class Whisky
@@ -50,9 +49,7 @@ class Whisky
 
     public static function readConfig(string $key): string|array|null
     {
-        $path = self::cwd('whisky.json');
-
-        $cfg = json_decode(File::get($path), true);
+        $cfg = FileJson::make(self::cwd('whisky.json'))->read();
 
         return data_get($cfg, $key);
     }
