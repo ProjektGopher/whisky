@@ -73,7 +73,7 @@ class Hook
      */
     public function isInstalled(): bool
     {
-        $bin = Whisky::bin();
+        $bin = Whisky::bin_path();
 
         return Str::contains(
             File::get(Platform::cwd(".git/hooks/{$this->hook}")),
@@ -87,7 +87,7 @@ class Hook
 
     public function install(): void
     {
-        $bin = Whisky::bin();
+        $bin = Whisky::bin_path();
         File::append(
             Platform::cwd(".git/hooks/{$this->hook}"),
             "eval \"$({$bin} get-run-cmd {$this->hook})\"".PHP_EOL,

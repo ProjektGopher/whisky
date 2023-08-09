@@ -29,7 +29,7 @@ class GetRunCmd extends Command
             return Command::SUCCESS;
         }
 
-        $bin = Whisky::bin();
+        $bin = Whisky::bin_path();
         $this->line(Whisky::base_path("bin/run-hook {$this->argument('hook')} {$bin}"));
 
         return Command::SUCCESS;

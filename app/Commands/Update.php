@@ -44,7 +44,7 @@ class Update extends Command
             $path = $file->getPathname();
             $hook = $file->getFilename();
             $contents = File::get($path);
-            $bin = Whisky::bin();
+            $bin = Whisky::bin_path();
             $command = "eval \"$({$bin} get-run-cmd {$hook})\"".PHP_EOL;
 
             if (! str_contains($contents, $command)) {
@@ -71,7 +71,7 @@ class Update extends Command
 
     private function hookIsInstalled(string $hook): bool
     {
-        $bin = Whisky::bin();
+        $bin = Whisky::bin_path();
 
         return Str::contains(
             File::get(Platform::cwd(".git/hooks/{$hook}")),
@@ -96,7 +96,7 @@ class Update extends Command
             return;
         }
 
-        $bin = Whisky::bin();
+        $bin = Whisky::bin_path();
         File::append(
             Platform::cwd(".git/hooks/{$hook}"),
             "eval \"$({$bin} get-run-cmd {$hook})\"".PHP_EOL,

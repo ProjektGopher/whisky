@@ -22,7 +22,7 @@ class Uninstall extends Command
         )->filter(
             fn (SplFileInfo $file) => ! str_ends_with($file->getFilename(), 'sample')
         )->each(function (SplFileInfo $file): void {
-            $bin = Whisky::bin();
+            $bin = Whisky::bin_path();
             $path = $file->getPathname();
             $hook = $file->getFilename();
             $contents = File::get($path);

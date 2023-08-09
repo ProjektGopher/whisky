@@ -11,7 +11,7 @@ class Whisky
         //
     }
 
-    public static function bin(): string
+    public static function bin_path(): string
     {
         return Platform::normalizePath(match (true) {
             self::dogfooding() => Platform::cwd('whisky'),
