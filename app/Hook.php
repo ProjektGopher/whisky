@@ -51,6 +51,11 @@ class Hook
         return File::exists(Platform::cwd(".git/hooks/{$this->hook}"));
     }
 
+    public function fileIsMissing(): bool
+    {
+        return ! $this->fileExists();
+    }
+
     /**
      * Checks if the hook is enabled **in git**.
      */
