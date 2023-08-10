@@ -26,7 +26,7 @@ class Platform
 
     public static function getGlobalComposerHome(): string
     {
-        return rtrim(shell_exec('composer -n global config home'), "\n");
+        return rtrim(shell_exec('composer -n global config home --quiet'), "\n");
     }
 
     public static function getGlobalComposerBinDir(): string
