@@ -11,7 +11,7 @@ class Validate extends Command
 {
     protected $signature = 'validate';
 
-    protected $description = 'Check whisky config if valid.';
+    protected $description = 'Verify that Whisky config is valid.';
 
     public function handle(): int
     {
