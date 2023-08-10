@@ -66,6 +66,7 @@ return [
         Illuminate\Foundation\Console\VendorPublishCommand::class,
         LaravelZero\Framework\Commands\StubPublishCommand::class,
 
+        Commands\Audit::class,
         Commands\GetRunCmd::class,
     ],
 
