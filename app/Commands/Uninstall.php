@@ -3,10 +3,9 @@
 namespace ProjektGopher\Whisky\Commands;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
-use ProjektGopher\Whisky\Whisky;
-use SplFileInfo;
+use ProjektGopher\Whisky\Hook;
+use ProjektGopher\Whisky\Platform;
 
 class Uninstall extends Command
 {
@@ -16,39 +15,18 @@ class Uninstall extends Command
 
     public function handle(): int
     {
-        collect(
-            File::files(Whisky::cwd('.git/hooks'))
-        )->filter(
-            fn (SplFileInfo $file) => ! str_ends_with($file->getFilename(), 'sample')
-        )->each(function (SplFileInfo $file): void {
-            $bin = Whisky::bin();
-            $path = $file->getPathname();
-            $hook = $file->getFilename();
-            $contents = File::get($path);
-            $commands = [
-                "eval \"$({$bin} get-run-cmd {$hook})\"".PHP_EOL,
-                // TODO: legacy - handle upgrade somehow
-                "eval \"$(./vendor/bin/whisky get-run-cmd {$hook})\"".PHP_EOL,
-            ];
-
-            if (! Str::contains($contents, $commands)) {
+        Hook::all(Hook::FROM_GIT)->each(function (Hook $hook): void {
+            if (! $hook->uninstall()) {
                 return;
             }
-
-            $contents = str_replace(
-                $commands,
-                '',
-                File::get($path),
-            );
-            File::put($path, $contents);
-            $this->info("Removed Whisky from {$hook} hook.");
+            $this->info("Removed Whisky from {$hook->name} hook.");
         });
 
         if (
             $this->option('json') ||
             $this->confirm('Would you also like to remove whisky.json?')
         ) {
-            File::delete(Whisky::cwd('whisky.json'));
+            File::delete(Platform::cwd('whisky.json'));
             $this->info('whisky.json removed.');
         }
 
