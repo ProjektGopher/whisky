@@ -6,9 +6,16 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use SplFileInfo;
 
 class Hook
 {
+    const FROM_CONFIG = 1;
+
+    const FROM_GIT = 2;
+
+    const ALL = 3;
+
     public string $name;
 
     public string $bin;
@@ -132,21 +139,36 @@ class Hook
     }
 
     /**
-     * Get a collection of all hooks listed in `whisky.json`.
+     * Get a collection of hooks.
      *
-     * TODO: this should accept an option to build by files
-     * in the `.git/hooks` dir instead of `whisky.json`.
-     * possibly `FROM_GIT`|`FROM_CONFIG`|`ALL` consts.
+     * Passing `Hook::FROM_CONFIG` flag will return hooks that are listed in `whisky.json` config.
+     * Passing `Hook::FROM_GIT`    flag will return hooks that are enabled in `.git/hooks` folder.
+     * Passing `Hook::ALL`, or `Hook::FROM_CONFIG | Hook::FROM_GIT` to flag will return all hooks.
      */
-    public static function all(): Collection
+    public static function all(int $flags = self::FROM_CONFIG): Collection
     {
-        return collect(array_keys(Whisky::readConfig('hooks')))->map(
+        $result = collect();
+
+        if ($flags & self::FROM_GIT) {
+            $result->push(...collect(File::files(Platform::cwd('.git/hooks')))
+                ->map(fn (SplFileInfo $file) => $file->getFilename())
+                ->filter(fn (string $filename) => ! str_ends_with($filename, 'sample'))
+            );
+        }
+
+        if ($flags & self::FROM_CONFIG) {
+            $result->push(...array_keys(Whisky::readConfig('hooks')));
+        }
+
+        // dd($result->unique());
+
+        return $result->unique()->map(
             fn (string $hook) => new Hook($hook),
         );
     }
 
-    public static function each(callable $callable): Collection
+    public static function each(callable $callable, int $flags = self::FROM_CONFIG): Collection
     {
-        return self::all()->each($callable);
+        return self::all($flags)->each($callable);
     }
 }
