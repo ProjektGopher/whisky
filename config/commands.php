@@ -41,14 +41,7 @@ return [
     |
     */
 
-    'add' => [
-        Commands\Install::class,
-        Commands\GetRunCmd::class,
-        Commands\Scripts::class,
-        Commands\SkipOnce::class,
-        Commands\Uninstall::class,
-        Commands\Update::class,
-    ],
+    'add' => [],
 
     /*
     |--------------------------------------------------------------------------
