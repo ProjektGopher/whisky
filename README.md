@@ -25,7 +25,17 @@ composer require --dev projektgopher/whisky
 ./vendor/bin/whisky install
 ```
 
-> **Note** It is recommended to only require Whisky on a project level, as it does not **currently** work as expected when installed _globally_.
+This is the recommended method, as every developer on your project will have access to the tool.
+
+### Global Installation
+Whisky can be installed globally, however this means that any developer on your project will _also_ need it installed globally if they want to use it.
+
+```bash
+composer global require projektgopher/whisky
+whisky install
+```
+
+If Whisky is installed both globally, and locally, on a project the version that's run will depend on how the command is invoked.
 
 
 ## Usage
@@ -100,6 +110,16 @@ composer test
 
 # Test hook without having to make a dummy commit
 git hook run pre-commit
+```
+
+
+## Troubleshooting
+If you've installed Whisky **both** locally **and** globally, and your hooks are being run _twice_, try uninstalling whisky from your hooks for **one** of those installations.
+
+```bash
+# Remove global Whisky hooks, leaving the local ones,
+# while keeping `whisky.json` in the project root.
+whisky uninstall -n
 ```
 
 
