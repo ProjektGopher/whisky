@@ -2,7 +2,7 @@
 
 namespace ProjektGopher\Whisky;
 
-use Exception;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -20,9 +20,29 @@ class Hook
         $this->bin = Whisky::bin_path();
     }
 
-    public function uninstall(): void
+    public function uninstall(): bool
     {
-        throw new Exception('Not implemented');
+        $path = Platform::cwd(".git/hooks/{$this->hook}");
+
+        if ($this->fileIsMissing()) {
+            // This should be unreachable.
+            throw new FileNotFoundException("Could not find {$path}");
+        }
+
+        $contents = File::get($path);
+        $commands = [
+            "eval \"$({$this->bin} get-run-cmd {$this->hook})\"".PHP_EOL,
+            // TODO: legacy - handle upgrade somehow
+            "eval \"$(./vendor/bin/whisky get-run-cmd {$this->hook})\"".PHP_EOL,
+        ];
+
+        if (! Str::contains($contents, $commands)) {
+            return false;
+        }
+
+        File::put($path, str_replace($commands, '', $contents));
+
+        return true;
     }
 
     // use ensureFileExists instead?
