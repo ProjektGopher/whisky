@@ -17,7 +17,7 @@ class Whisky
 
     public static function dogfooding(): bool
     {
-        return Platform::cwd() === base_path();
+        return Platform::cwd() === Platform::normalizePath(base_path());
     }
 
     public static function isRunningGlobally(): bool
