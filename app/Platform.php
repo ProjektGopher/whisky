@@ -24,6 +24,16 @@ class Platform
         return $path;
     }
 
+    public static function getGlobalComposerHome(): string
+    {
+        return rtrim(shell_exec('composer -n global config home --quiet'), "\n");
+    }
+
+    public static function getGlobalComposerBinDir(): string
+    {
+        return rtrim(shell_exec('composer -n global config bin-dir --absolute --quiet'), "\n");
+    }
+
     public function determineQuote(): string
     {
         return $this->isWindows() ? '"' : "'";

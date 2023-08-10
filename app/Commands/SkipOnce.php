@@ -4,7 +4,7 @@ namespace ProjektGopher\Whisky\Commands;
 
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
-use ProjektGopher\Whisky\Whisky;
+use ProjektGopher\Whisky\Platform;
 
 class SkipOnce extends Command
 {
@@ -14,7 +14,7 @@ class SkipOnce extends Command
 
     public function handle(): int
     {
-        File::put(Whisky::base_path('bin/skip-once'), '');
+        File::put(Platform::cwd('.git/hooks/skip-once'), '');
 
         $this->info('Next hook will be skipped.');
         $this->line('If the action you\'re about to take has a `pre` and `post` hook');

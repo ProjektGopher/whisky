@@ -2,45 +2,43 @@
 
 namespace ProjektGopher\Whisky;
 
-use Phar;
+use Illuminate\Support\Facades\File;
 
 class Whisky
 {
+    public static function base_path(string $path = ''): string
+    {
+        $code_path = "vendor/projektgopher/whisky/{$path}";
+
+        return Platform::normalizePath(match (true) {
+            self::dogfooding() => base_path($path),
+            self::isRunningGlobally() => Platform::getGlobalComposerHome().'/'.$code_path,
+            default => Platform::cwd($code_path),
+        });
+    }
+
     public static function bin_path(): string
     {
         return Platform::normalizePath(match (true) {
             self::dogfooding() => Platform::cwd('whisky'),
-            self::isRunningGlobally() => '/usr/local/bin/whisky', // TODO
+            self::isRunningGlobally() => Platform::getGlobalComposerBinDir().'/whisky',
             default => Platform::cwd('vendor/bin/whisky'),
         });
     }
 
     public static function dogfooding(): bool
     {
-        return Platform::cwd() === self::base_path();
+        return Platform::cwd() === Platform::normalizePath(base_path());
     }
 
-    // TODO
-    public static function isRunningGlobally(): bool
-    {
-        // composer -n config --global home
-        //
-        return false;
-    }
-
-    // TODO
     public static function isInstalledGlobally(): bool
     {
-        // composer -n config --global home
-        // composer -n global config bin-dir --absolute --quiet
-        return false;
+        return File::exists(Platform::getGlobalComposerBinDir().'/whisky');
     }
 
-    public static function base_path(string $path = ''): string
+    public static function isRunningGlobally(): bool
     {
-        return Platform::normalizePath(Phar::running()
-            ? Platform::cwd("vendor/projektgopher/whisky/{$path}")
-            : base_path($path));
+        return str_starts_with(base_path(), Platform::getGlobalComposerHome());
     }
 
     public static function readConfig(string $key): string|array|null
