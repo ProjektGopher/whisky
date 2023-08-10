@@ -6,6 +6,17 @@ use Illuminate\Support\Facades\File;
 
 class Whisky
 {
+    public static function base_path(string $path = ''): string
+    {
+        $code_path = "vendor/projektgopher/whisky/{$path}";
+
+        return Platform::normalizePath(match (true) {
+            self::dogfooding() => base_path($path),
+            self::isRunningGlobally() => Platform::getGlobalComposerHome().'/'.$code_path,
+            default => Platform::cwd($code_path),
+        });
+    }
+
     public static function bin_path(): string
     {
         return Platform::normalizePath(match (true) {
@@ -20,25 +31,14 @@ class Whisky
         return Platform::cwd() === Platform::normalizePath(base_path());
     }
 
-    public static function isRunningGlobally(): bool
-    {
-        return str_starts_with(base_path(), Platform::getGlobalComposerHome());
-    }
-
     public static function isInstalledGlobally(): bool
     {
         return File::exists(Platform::getGlobalComposerBinDir().'/whisky');
     }
 
-    public static function base_path(string $path = ''): string
+    public static function isRunningGlobally(): bool
     {
-        $code_path = "vendor/projektgopher/whisky/{$path}";
-
-        return Platform::normalizePath(match (true) {
-            self::dogfooding() => base_path($path),
-            self::isRunningGlobally() => Platform::getGlobalComposerHome().'/'.$code_path,
-            default => Platform::cwd($code_path),
-        });
+        return str_starts_with(base_path(), Platform::getGlobalComposerHome());
     }
 
     public static function readConfig(string $key): string|array|null
