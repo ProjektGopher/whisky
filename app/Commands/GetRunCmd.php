@@ -4,6 +4,7 @@ namespace ProjektGopher\Whisky\Commands;
 
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
+use ProjektGopher\Whisky\Platform;
 use ProjektGopher\Whisky\Whisky;
 
 /**
@@ -18,8 +19,8 @@ class GetRunCmd extends Command
 
     public function handle(): int
     {
-        if (File::exists(Whisky::base_path('bin/skip-once'))) {
-            File::delete(Whisky::base_path('bin/skip-once'));
+        if (File::exists(Platform::cwd('.git/hooks/skip-once'))) {
+            File::delete(Platform::cwd('.git/hooks/skip-once'));
 
             return Command::SUCCESS;
         }

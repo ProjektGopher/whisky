@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\File;
+use ProjektGopher\Whisky\Platform;
 
 it('has a skip once command', function () {
     $this->artisan('list')
@@ -13,8 +14,8 @@ it('creates a skip-once file', function () {
         ->expectsOutputToContain('Next hook will be skipped.')
         ->assertExitCode(0);
 
-    expect(File::exists(__DIR__.'/../../bin/skip-once'))->toBeTrue();
+    expect(File::exists(Platform::cwd('.git/hooks/skip-once')))->toBeTrue();
 
     // Cleanup
-    File::delete(__DIR__.'/../../bin/skip-once');
+    File::delete(Platform::cwd('.git/hooks/skip-once'));
 });

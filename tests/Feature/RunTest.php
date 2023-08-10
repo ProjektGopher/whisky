@@ -1,16 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\File;
+use ProjektGopher\Whisky\Platform;
 
 it('deletes skip-once file if exists and outputs nothing', function () {
     File::shouldReceive('exists')
         ->once()
-        ->with(normalizePath(base_path('bin/skip-once')))
+        ->with(Platform::cwd('.git/hooks/skip-once'))
         ->andReturnTrue();
 
     File::shouldReceive('delete')
         ->once()
-        ->with(normalizePath(base_path('bin/skip-once')))
+        ->with(Platform::cwd('.git/hooks/skip-once'))
         ->andReturnTrue();
 
     $this->artisan('get-run-cmd pre-commit')
