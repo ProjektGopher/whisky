@@ -38,7 +38,7 @@ class Whisky
 
     public static function isRunningGlobally(): bool
     {
-        return str_starts_with(base_path(), Platform::getGlobalComposerHome());
+        return str_starts_with(base_path(), 'phar://'.Platform::getGlobalComposerHome());
     }
 
     public static function readConfig(string $key): string|array|null
