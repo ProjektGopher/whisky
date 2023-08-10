@@ -6,11 +6,6 @@ use Phar;
 
 class Whisky
 {
-    public function __construct()
-    {
-        //
-    }
-
     public static function bin_path(): string
     {
         return Platform::normalizePath(match (true) {
