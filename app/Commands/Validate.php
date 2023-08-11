@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
 use ProjektGopher\Whisky\FileJson;
 use ProjektGopher\Whisky\Platform;
+use ProjektGopher\Whisky\Whisky;
 
 class Validate extends Command
 {
@@ -16,8 +17,13 @@ class Validate extends Command
     public function handle(): int
     {
         if (File::missing(Platform::cwd('whisky.json'))) {
+            $cmd = match (true) {
+                Whisky::dogfooding() => 'php whisky install',
+                Whisky::isRunningGlobally() => 'whisky install',
+                default => 'vendor/bin/whisky install',
+            };
             $this->error('Whisky has not been initialized in this project, aborting...');
-            $this->line('Run `./vendor/bin/whisky install` to initialize Whisky in this project.');
+            $this->line("Run `{$cmd}` to initialize Whisky in this project.");
 
             return Command::FAILURE;
         }
