@@ -36,7 +36,7 @@ class Whisky
         return File::exists(Platform::getGlobalComposerBinDir().'/whisky');
     }
 
-    public static function inInstalledLocally(): bool
+    public static function isInstalledLocally(): bool
     {
         return File::exists(Platform::cwd('vendor/bin/whisky'));
     }
