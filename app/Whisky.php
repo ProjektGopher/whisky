@@ -12,8 +12,8 @@ class Whisky
 
         return Platform::normalizePath(match (true) {
             self::dogfooding() => base_path($path),
-            self::isRunningGlobally() => Platform::getGlobalComposerHome().'/'.$code_path,
-            default => Platform::cwd($code_path),
+            self::isRunningLocally() => Platform::cwd($code_path),
+            default => Platform::getGlobalComposerHome().'/'.$code_path,
         });
     }
 
@@ -21,8 +21,8 @@ class Whisky
     {
         return Platform::normalizePath(match (true) {
             self::dogfooding() => Platform::cwd('whisky'),
-            self::isRunningGlobally() => Platform::getGlobalComposerBinDir().'/whisky',
-            default => Platform::cwd('vendor/bin/whisky'),
+            self::isRunningLocally() => Platform::cwd('vendor/bin/whisky'),
+            default => Platform::getGlobalComposerBinDir().'/whisky',
         });
     }
 
@@ -36,9 +36,21 @@ class Whisky
         return File::exists(Platform::getGlobalComposerBinDir().'/whisky');
     }
 
+    public static function inInstalledLocally(): bool
+    {
+        return File::exists(Platform::cwd('vendor/bin/whisky'));
+    }
+
     public static function isRunningGlobally(): bool
     {
-        return str_starts_with(base_path(), 'phar://'.Platform::getGlobalComposerHome());
+        // TODO: appears broken on WAMP - base_path() and getGlobalComposerHome() differ
+        // return str_starts_with(base_path(), 'phar://'.Platform::getGlobalComposerHome());
+        return ! self::isRunningLocally() && ! self::dogfooding();
+    }
+
+    public static function isRunningLocally(): bool
+    {
+        return str_starts_with(base_path(), 'phar://'.Platform::cwd());
     }
 
     public static function readConfig(string $key): string|array|null
