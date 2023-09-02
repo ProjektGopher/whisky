@@ -1,6 +1,5 @@
 <?php
 
-use Exception;
 use Illuminate\Support\Facades\File;
 use ProjektGopher\Whisky\FileJson;
 
