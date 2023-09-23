@@ -62,6 +62,23 @@ Adding or removing any **hooks** (_not_ individual commands) to your `whisky.jso
 
 > **Warning** all hooks are **evaluated as-is** in the terminal. Keep this in mind when committing anything involving changes to your `whisky.json`.
 
+### Automate Hook Updates
+Add Composer scripts to ensure consistent git hooks for all contributors of a project:
+
+```js
+// composer.json
+// ...  
+  "scripts": {
+    "post-install-cmd": [
+      "whisky update"
+    ],
+    "post-update-cmd": [
+      "whisky update"
+    ]
+  }
+// ...  
+```
+
 ### Skipping Hooks
 Sometimes you need to commit or push changes without running your git hooks,
 like when handing off work to another computer. This can usually be done
