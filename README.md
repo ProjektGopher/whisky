@@ -58,9 +58,9 @@ The `install` command will create a `whisky.json` file in your project root:
 
 For a complete list of supported git hooks, see the [Git Documentation](https://git-scm.com/docs/githooks#_hooks).
 
-Adding or removing any **hooks** (_not_ individual commands) to your `whisky.json` file should be followed by `./vendor/bin/whisky update` to ensure that these changes are reflected in your `.git/hooks` directory.
-
 > **Warning** all hooks are **evaluated as-is** in the terminal. Keep this in mind when committing anything involving changes to your `whisky.json`.
+
+Adding or removing any **hooks** (_not_ individual commands) to your `whisky.json` file should be followed by `./vendor/bin/whisky update` to ensure that these changes are reflected in your `.git/hooks` directory.
 
 ### Automate Hook Updates
 Add Composer scripts to ensure consistent git hooks for all contributors of a project:
