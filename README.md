@@ -41,7 +41,8 @@ If Whisky is installed both globally, and locally, on a project the version that
 ## Usage
 The `install` command will create a `whisky.json` file in your project root:
 
-```json
+```js
+// whisky.json
 {
   "disabled": [],
   "hooks": {
