@@ -62,8 +62,8 @@ For a complete list of supported git hooks, see the [Git Documentation](https://
 
 Adding or removing any **hooks** (_not_ individual commands) to your `whisky.json` file should be followed by `./vendor/bin/whisky update` to ensure that these changes are reflected in your `.git/hooks` directory.
 
-### Automate Hook Updates
-Add Composer scripts to ensure consistent git hooks for all contributors of a project:
+### Automating Hook Updates
+While we suggest leaving Whisky as an 'opt-in' tool, by adding a couple of Composer scripts we can _ensure_ consistent git hooks for all project contributors. This will **force** everyone on the project to use Whisky:
 
 ```js
 // composer.json
@@ -77,7 +77,6 @@ Add Composer scripts to ensure consistent git hooks for all contributors of a pr
     ]
   }
 // ...  
-```
 
 ### Skipping Hooks
 Sometimes you need to commit or push changes without running your git hooks,
