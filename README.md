@@ -41,7 +41,8 @@ If Whisky is installed both globally, and locally, on a project the version that
 ## Usage
 The `install` command will create a `whisky.json` file in your project root:
 
-```json
+```js
+// whisky.json
 {
   "disabled": [],
   "hooks": {
@@ -57,9 +58,25 @@ The `install` command will create a `whisky.json` file in your project root:
 
 For a complete list of supported git hooks, see the [Git Documentation](https://git-scm.com/docs/githooks#_hooks).
 
+> **Warning** all hooks are **evaluated as-is** in the terminal. Keep this in mind when committing anything involving changes to your `whisky.json`.
+
 Adding or removing any **hooks** (_not_ individual commands) to your `whisky.json` file should be followed by `./vendor/bin/whisky update` to ensure that these changes are reflected in your `.git/hooks` directory.
 
-> **Warning** all hooks are **evaluated as-is** in the terminal. Keep this in mind when committing anything involving changes to your `whisky.json`.
+### Automating Hook Updates
+While we suggest leaving Whisky as an 'opt-in' tool, by adding a couple of Composer scripts we can _ensure_ consistent git hooks for all project contributors. This will **force** everyone on the project to use Whisky:
+
+```js
+// composer.json
+// ...  
+  "scripts": {
+    "post-install-cmd": [
+      "whisky update"
+    ],
+    "post-update-cmd": [
+      "whisky update"
+    ]
+  }
+// ...  
 
 ### Skipping Hooks
 Sometimes you need to commit or push changes without running your git hooks,
