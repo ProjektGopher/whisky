@@ -76,7 +76,8 @@ While we suggest leaving Whisky as an 'opt-in' tool, by adding a couple of Compo
       "whisky update"
     ]
   }
-// ...  
+// ...
+```
 
 ### Skipping Hooks
 Sometimes you need to commit or push changes without running your git hooks,
