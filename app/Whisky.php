@@ -2,6 +2,7 @@
 
 namespace ProjektGopher\Whisky;
 
+use Exception;
 use Illuminate\Support\Facades\File;
 
 class Whisky
@@ -12,8 +13,9 @@ class Whisky
 
         return Platform::normalizePath(match (true) {
             self::dogfooding() => base_path($path),
+            self::isRunningLocally() => Platform::cwd($code_path),
             self::isRunningGlobally() => Platform::getGlobalComposerHome().'/'.$code_path,
-            default => Platform::cwd($code_path),
+            default => throw new Exception('Could not determine running context.')
         });
     }
 
@@ -21,8 +23,9 @@ class Whisky
     {
         return Platform::normalizePath(match (true) {
             self::dogfooding() => Platform::cwd('whisky'),
+            self::isRunningLocally() => Platform::cwd('vendor/bin/whisky'),
             self::isRunningGlobally() => Platform::getGlobalComposerBinDir().'/whisky',
-            default => Platform::cwd('vendor/bin/whisky'),
+            default => throw new Exception('Could not determine running context.')
         });
     }
 
@@ -36,9 +39,21 @@ class Whisky
         return File::exists(Platform::getGlobalComposerBinDir().'/whisky');
     }
 
+    public static function isInstalledLocally(): bool
+    {
+        return File::exists(Platform::cwd('vendor/bin/whisky'));
+    }
+
     public static function isRunningGlobally(): bool
     {
+        // TODO: appears broken on WAMP - base_path() and getGlobalComposerHome() differ
         return str_starts_with(base_path(), 'phar://'.Platform::getGlobalComposerHome());
+        // return ! self::isRunningLocally() && ! self::dogfooding();
+    }
+
+    public static function isRunningLocally(): bool
+    {
+        return str_starts_with(base_path(), 'phar://'.Platform::cwd());
     }
 
     public static function readConfig(string $key): string|array|null
