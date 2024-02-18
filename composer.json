@@ -29,7 +29,7 @@
     "require-dev": {
         "laravel-zero/framework": "^10.1.2",
         "laravel/pint": "^1.10",
-        "mockery/mockery": "^1.5.1",
+        "mockery/mockery": "^1.6.7",
         "nunomaduro/larastan": "^2.0",
         "nunomaduro/termwind": "^1.15.1",
         "swaggest/json-schema": "^0.12.41",
