@@ -32,7 +32,7 @@ class Audit extends Command
             ['key', 'value'],
             [
                 ['- Whisky -', ''],
-                ['installed globally?', Whisky::isInstalledGlobally() ? 'yes' : 'no'],
+                ['installed globally?', Whisky::isInstalledGlobally() ? 'yes (v'.(include Platform::getGlobalComposerHome().'/vendor/projektgopher/whisky/config/app.php')['version'].')' : 'no'],
                 ['running globally?', Whisky::isRunningGlobally() ? 'yes' : 'no'],
                 ['dogfooding?', Whisky::dogfooding() ? 'yes' : 'no'],
                 ['base path', Whisky::base_path()],
