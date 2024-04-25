@@ -6,12 +6,12 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag release version'
+        description: "Tag release version"
         required: true
 
 jobs:
   publish:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     name: Release PHAR
 
@@ -21,18 +21,18 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             GITHUB_REF=${{ github.event.inputs.tag }}
-          fi          
+          fi
           echo "tag=${GITHUB_REF##*v}" >> "$GITHUB_OUTPUT"
 
       - name: Checkout the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: v${{ steps.tag.outputs.tag }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: 8.2
           extensions: dom, curl, libxml, mbstring, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
@@ -45,7 +45,7 @@ jobs:
         run: ./whisky app:build whisky.phar --build-version=${{ steps.tag.outputs.tag }}
 
       - name: Upload the PHAR artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: whisky.phar
           path: builds/whisky.phar
