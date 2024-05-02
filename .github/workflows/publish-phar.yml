@@ -25,7 +25,7 @@ jobs:
           echo "tag=${GITHUB_REF##*v}" >> "$GITHUB_OUTPUT"
 
       - name: Checkout the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: v${{ steps.tag.outputs.tag }}
 
@@ -45,7 +45,7 @@ jobs:
         run: ./whisky app:build whisky.phar --build-version=${{ steps.tag.outputs.tag }}
 
       - name: Upload the PHAR artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: whisky.phar
           path: builds/whisky.phar
