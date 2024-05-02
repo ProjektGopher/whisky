@@ -32,9 +32,9 @@
         "laravel/pint": "^1.10",
         "mockery/mockery": "^1.6.7",
         "nunomaduro/termwind": "^2.0.1",
-        "swaggest/json-schema": "^0.12.41",
         "pestphp/pest": "^2.9",
-        "pestphp/pest-plugin-type-coverage": "^2.0"
+        "pestphp/pest-plugin-type-coverage": "^2.0",
+        "swaggest/json-schema": "^0.12.41"
     },
     "autoload": {
         "psr-4": {
