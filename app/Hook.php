@@ -37,11 +37,9 @@ class Hook
         }
 
         $contents = File::get($path);
-        $commands = [
-            "eval \"$({$this->bin} get-run-cmd {$this->hook})\"".PHP_EOL,
-            // TODO: legacy - handle upgrade somehow
-            "eval \"$(./vendor/bin/whisky get-run-cmd {$this->hook})\"".PHP_EOL,
-        ];
+        $commands = $this->getSnippets()
+            ->map(fn (string $snippet): string => $snippet.PHP_EOL)
+            ->toArray();
 
         if (! Str::contains($contents, $commands)) {
             return false;
@@ -94,11 +92,7 @@ class Hook
     {
         return Str::contains(
             File::get(Platform::cwd(".git/hooks/{$this->hook}")),
-            [
-                "eval \"$({$this->bin} get-run-cmd {$this->hook})\"",
-                // TODO: legacy - handle upgrade somehow
-                "eval \"$(./vendor/bin/whisky get-run-cmd {$this->hook})\"",
-            ],
+            $this->getSnippets()->toArray(),
         );
     }
 
@@ -109,7 +103,7 @@ class Hook
     {
         File::append(
             Platform::cwd(".git/hooks/{$this->hook}"),
-            "eval \"$({$this->bin} get-run-cmd {$this->hook})\"".PHP_EOL,
+            $this->getSnippets()->first().PHP_EOL,
         );
     }
 
@@ -124,6 +118,23 @@ class Hook
     public function getScripts(): Collection
     {
         return collect(Whisky::readConfig("hooks.{$this->hook}"));
+    }
+
+    /**
+     * Collect the bash snippet history for calling the Whisky bin.
+     * The current version of the snippet should always be first.
+     * We keep this history to make updating our hooks easier.
+     *
+     * @return Collection<int, string>
+     */
+    public function getSnippets(): Collection
+    {
+        return collect([
+            "{$this->bin} run {$this->hook}",
+            // Legacy Snippets.
+            "eval \"$({$this->bin} get-run-cmd {$this->hook})\"",
+            "eval \"$(./vendor/bin/whisky get-run-cmd {$this->hook})\"",
+        ]);
     }
 
     ////////////////////////////////////////

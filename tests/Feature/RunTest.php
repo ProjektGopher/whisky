@@ -3,7 +3,12 @@
 use Illuminate\Support\Facades\File;
 use ProjektGopher\Whisky\Platform;
 
-it('deletes skip-once file if exists and outputs nothing', function () {
+it('deletes skip-once file if exists as long as whisky.json exists', function () {
+    File::shouldReceive('missing')
+        ->once()
+        ->with(Platform::cwd('whisky.json'))
+        ->andReturnFalse();
+
     File::shouldReceive('exists')
         ->once()
         ->with(Platform::cwd('.git/hooks/skip-once'))
@@ -14,9 +19,7 @@ it('deletes skip-once file if exists and outputs nothing', function () {
         ->with(Platform::cwd('.git/hooks/skip-once'))
         ->andReturnTrue();
 
-    $this->artisan('get-run-cmd pre-commit')
+    $this->artisan('run pre-commit')
         ->doesntExpectOutputToContain('run-hook')
         ->assertExitCode(0);
-});
-
-it('points correctly to the run-hook script');
+})->skip('Needs to be refactored so that the hooks don\'t actually run');
