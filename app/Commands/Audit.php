@@ -14,18 +14,6 @@ class Audit extends Command
 
     public function handle(): int
     {
-        // co-pilot things. Might be useful, might not.
-        // $this->table(
-        //     ['Hook', 'Status', 'File', 'Scripts'],
-        //     Hook::all()->map(function (Hook $hook): array {
-        //         return [
-        //             $hook->name,
-        //             $hook->status(),
-        //             $hook->file(),
-        //             $hook->scripts()->implode(PHP_EOL),
-        //         ];
-        //     })->toArray()
-        // );
         $platform = new Platform();
 
         $this->table(
