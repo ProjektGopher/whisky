@@ -8,6 +8,7 @@ use LaravelZero\Framework\Commands\Command;
 use ProjektGopher\Whisky\Hook;
 use ProjektGopher\Whisky\Platform;
 use ProjektGopher\Whisky\Whisky;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 class Run extends Command
 {
@@ -40,7 +41,17 @@ class Run extends Command
         Hook::make($this->argument('hook'))
             ->getScripts()
             ->each(function (string $script) use (&$exitCode): void {
-                $result = Process::forever()->tty()->run($script);
+                $isTtySupported = SymfonyProcess::isTtySupported();
+
+                $result = $isTtySupported
+                    ? Process::forever()->tty()->run($script)
+                    : Process::timeout(300)->run($script);
+
+                if ($result->failed() && ! $isTtySupported) {
+                    $this->line($result->errorOutput());
+                    $this->line($result->output());
+                }
+
                 $exitCode = $exitCode | $result->exitCode();
             });
 
