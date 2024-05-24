@@ -2,6 +2,7 @@
 
 namespace ProjektGopher\Whisky\Commands;
 
+use Illuminate\Support\Facades\Process;
 use LaravelZero\Framework\Commands\Command;
 use ProjektGopher\Whisky\Platform;
 use ProjektGopher\Whisky\Whisky;
@@ -14,26 +15,16 @@ class Audit extends Command
 
     public function handle(): int
     {
-        // co-pilot things. Might be useful, might not.
-        // $this->table(
-        //     ['Hook', 'Status', 'File', 'Scripts'],
-        //     Hook::all()->map(function (Hook $hook): array {
-        //         return [
-        //             $hook->name,
-        //             $hook->status(),
-        //             $hook->file(),
-        //             $hook->scripts()->implode(PHP_EOL),
-        //         ];
-        //     })->toArray()
-        // );
         $platform = new Platform();
 
         $this->table(
             ['key', 'value'],
             [
                 ['- Whisky -', ''],
-                ['installed globally?', Whisky::isInstalledGlobally() ? 'yes' : 'no'],
+                ['installed globally?', $this->isWhiskyInstalledGlobally()],
                 ['running globally?', Whisky::isRunningGlobally() ? 'yes' : 'no'],
+                ['installed locally?', $this->isWhiskyInstalledLocally()],
+                ['running locally?', Whisky::isRunningLocally() ? 'yes' : 'no'],
                 ['dogfooding?', Whisky::dogfooding() ? 'yes' : 'no'],
                 ['base path', Whisky::base_path()],
                 ['bin path', Whisky::bin_path()],
@@ -53,5 +44,29 @@ class Audit extends Command
         );
 
         return Command::SUCCESS;
+    }
+
+    protected function isWhiskyInstalledGlobally(): string
+    {
+        if (! Whisky::isInstalledGlobally()) {
+            return 'no';
+        }
+
+        $result = Process::run('composer global show projektgopher/whisky --format=json');
+        $version = json_decode($result->output(), true)['versions'][0];
+
+        return "yes ({$version})";
+    }
+
+    protected function isWhiskyInstalledLocally(): string
+    {
+        if (! Whisky::isInstalledLocally()) {
+            return 'no';
+        }
+
+        $result = Process::run('composer show projektgopher/whisky --format=json');
+        $version = json_decode($result->output(), true)['versions'][0];
+
+        return "yes ({$version})";
     }
 }

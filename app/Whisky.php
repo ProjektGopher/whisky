@@ -41,6 +41,16 @@ class Whisky
         return str_starts_with(base_path(), 'phar://'.Platform::getGlobalComposerHome());
     }
 
+    public static function isInstalledLocally(): bool
+    {
+        return File::exists(Platform::cwd('vendor/projektgopher/whisky'));
+    }
+
+    public static function isRunningLocally(): bool
+    {
+        return str_starts_with(base_path(), 'phar://'.Platform::cwd('vendor/bin'));
+    }
+
     public static function readConfig(string $key): string|array|null
     {
         $cfg = FileJson::make(Platform::cwd('whisky.json'))->read();
