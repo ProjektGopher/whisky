@@ -52,7 +52,7 @@ class Run extends Command
                     $this->line($result->output());
                 }
 
-                $exitCode = $exitCode | $result->exitCode();
+                $exitCode |= $result->exitCode();
             });
 
         return $exitCode;
