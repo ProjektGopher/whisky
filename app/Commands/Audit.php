@@ -2,6 +2,7 @@
 
 namespace ProjektGopher\Whisky\Commands;
 
+use Illuminate\Support\Facades\Process;
 use LaravelZero\Framework\Commands\Command;
 use ProjektGopher\Whisky\Platform;
 use ProjektGopher\Whisky\Whisky;
@@ -20,7 +21,7 @@ class Audit extends Command
             ['key', 'value'],
             [
                 ['- Whisky -', ''],
-                ['installed globally?', Whisky::isInstalledGlobally() ? 'yes (v'.(include Platform::getGlobalComposerHome().'/vendor/projektgopher/whisky/config/app.php')['version'].')' : 'no'],
+                ['installed globally?', $this->isWhiskyInstalledGlobally()],
                 ['running globally?', Whisky::isRunningGlobally() ? 'yes' : 'no'],
                 ['dogfooding?', Whisky::dogfooding() ? 'yes' : 'no'],
                 ['base path', Whisky::base_path()],
@@ -41,5 +42,17 @@ class Audit extends Command
         );
 
         return Command::SUCCESS;
+    }
+
+    protected function isWhiskyInstalledGlobally(): string
+    {
+        if (! Whisky::isInstalledGlobally()) {
+            return 'no';
+        }
+
+        $result = Process::run('composer global show projektgopher/whisky --format=json');
+        $version = json_decode($result->output(), true)['versions'][0];
+
+        return "yes ({$version})";
     }
 }
