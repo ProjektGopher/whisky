@@ -23,7 +23,7 @@ class Audit extends Command
                 ['- Whisky -', ''],
                 ['installed globally?', $this->isWhiskyInstalledGlobally()],
                 ['running globally?', Whisky::isRunningGlobally() ? 'yes' : 'no'],
-                ['installed locally?', Whisky::isInstalledLocally() ? 'yes' : 'no'],
+                ['installed locally?', $this->isWhiskyInstalledLocally()],
                 ['running locally?', Whisky::isRunningLocally() ? 'yes' : 'no'],
                 ['dogfooding?', Whisky::dogfooding() ? 'yes' : 'no'],
                 ['base path', Whisky::base_path()],
@@ -53,6 +53,18 @@ class Audit extends Command
         }
 
         $result = Process::run('composer global show projektgopher/whisky --format=json');
+        $version = json_decode($result->output(), true)['versions'][0];
+
+        return "yes ({$version})";
+    }
+
+    protected function isWhiskyInstalledLocally(): string
+    {
+        if (! Whisky::isInstalledLocally()) {
+            return 'no';
+        }
+
+        $result = Process::run('composer show projektgopher/whisky --format=json');
         $version = json_decode($result->output(), true)['versions'][0];
 
         return "yes ({$version})";
