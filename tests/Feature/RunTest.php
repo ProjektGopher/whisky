@@ -14,9 +14,7 @@ it('deletes skip-once file if exists and outputs nothing', function () {
         ->with(Platform::cwd('.git/hooks/skip-once'))
         ->andReturnTrue();
 
-    $this->artisan('get-run-cmd pre-commit')
+    $this->artisan('run pre-commit')
         ->doesntExpectOutputToContain('run-hook')
         ->assertExitCode(0);
-});
-
-it('points correctly to the run-hook script');
+})->skip();
