@@ -2,6 +2,7 @@
     "name": "projektgopher/whisky",
     "description": "A simple CLI tool for managing a project's git hooks across multiple members.",
     "keywords": [
+        "dev",
         "git",
         "hooks",
         "cli",
