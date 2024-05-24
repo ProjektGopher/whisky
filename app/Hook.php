@@ -130,8 +130,9 @@ class Hook
     public function getSnippets(): Collection
     {
         return collect([
-            "eval \"$({$this->bin} get-run-cmd {$this->hook})\"",
+            "{$this->bin} run {$this->hook}",
             // Legacy Snippets.
+            "eval \"$({$this->bin} get-run-cmd {$this->hook})\"",
             "eval \"$(./vendor/bin/whisky get-run-cmd {$this->hook})\"",
         ]);
     }
