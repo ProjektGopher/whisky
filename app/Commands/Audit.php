@@ -23,6 +23,8 @@ class Audit extends Command
                 ['- Whisky -', ''],
                 ['installed globally?', $this->isWhiskyInstalledGlobally()],
                 ['running globally?', Whisky::isRunningGlobally() ? 'yes' : 'no'],
+                ['installed locally?', Whisky::isInstalledLocally() ? 'yes' : 'no'],
+                ['running locally?', Whisky::isRunningLocally() ? 'yes' : 'no'],
                 ['dogfooding?', Whisky::dogfooding() ? 'yes' : 'no'],
                 ['base path', Whisky::base_path()],
                 ['bin path', Whisky::bin_path()],
