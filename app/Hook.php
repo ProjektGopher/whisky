@@ -29,7 +29,7 @@ class Hook
 
     public function uninstall(): bool
     {
-        $path = Platform::cwd(".git/hooks/{$this->hook}");
+        $path = Platform::getGitDir("hooks/{$this->hook}");
 
         if ($this->fileIsMissing()) {
             // This should be unreachable.
@@ -53,7 +53,7 @@ class Hook
     // use ensureFileExists instead?
     public function fileExists(): bool
     {
-        return File::exists(Platform::cwd(".git/hooks/{$this->hook}"));
+        return File::exists(Platform::getGitDir("hooks/{$this->hook}"));
     }
 
     public function fileIsMissing(): bool
@@ -82,7 +82,7 @@ class Hook
      */
     public function enable(): void
     {
-        File::put(Platform::cwd(".git/hooks/{$this->hook}"), '#!/bin/sh'.PHP_EOL);
+        File::put(Platform::getGitDir("hooks/{$this->hook}"), '#!/bin/sh'.PHP_EOL);
     }
 
     /**
@@ -101,7 +101,7 @@ class Hook
     public function isInstalled(): bool
     {
         return Str::contains(
-            File::get(Platform::cwd(".git/hooks/{$this->hook}")),
+            File::get(Platform::getGitDir("hooks/{$this->hook}")),
             $this->getSnippets()->toArray(),
         );
     }
@@ -112,7 +112,7 @@ class Hook
     public function install(): void
     {
         File::append(
-            Platform::cwd(".git/hooks/{$this->hook}"),
+            Platform::getGitDir("hooks/{$this->hook}"),
             $this->getSnippets()->first().PHP_EOL,
         );
     }
@@ -139,9 +139,11 @@ class Hook
      */
     public function getSnippets(): Collection
     {
+        $cwd = Platform::cwd();
         return collect([
-            "{$this->bin} run {$this->hook} \"$1\"",
+            "pushd {$cwd} && {$this->bin} run {$this->hook} \"$1\" && popd",
             // Legacy Snippets.
+            "{$this->bin} run {$this->hook} \"$1\"",
             "{$this->bin} run {$this->hook}",
             "eval \"$({$this->bin} get-run-cmd {$this->hook})\"",
             "eval \"$(./vendor/bin/whisky get-run-cmd {$this->hook})\"",
@@ -172,7 +174,7 @@ class Hook
         $result = collect();
 
         if ($flags & self::FROM_GIT) {
-            $result->push(...collect(File::files(Platform::cwd('.git/hooks')))
+            $result->push(...collect(File::files(Platform::getGitDir('hooks')))
                 ->map(fn (SplFileInfo $file) => $file->getFilename())
                 ->filter(fn (string $filename) => ! str_ends_with($filename, 'sample'))
             );

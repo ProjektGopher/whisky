@@ -2,8 +2,6 @@
 
 namespace ProjektGopher\Whisky;
 
-use Illuminate\Support\Facades\File;
-
 class Platform
 {
     public static function cwd(string $path = ''): string
@@ -33,6 +31,21 @@ class Platform
         return $path;
     }
 
+    public static function getGitDir(string $path = ''): ?string
+    {
+        $output = shell_exec('git rev-parse --git-dir');
+
+        if ($output === null) {
+            return null;
+        }
+
+        if ($path) {
+            return static::normalizePath(rtrim($output, "\n").'/'.$path);
+        }
+
+        return static::normalizePath(rtrim($output, "\n"));
+    }
+
     public static function getGlobalComposerHome(): string
     {
         return rtrim(shell_exec('composer -n global config home --quiet'), "\n");
@@ -58,13 +71,8 @@ class Platform
         return ! $this->isWindows();
     }
 
-    public function gitIsInitialized(): bool
+    public static function gitIsInitialized(): bool
     {
-        return File::exists(Platform::cwd('.git'));
-    }
-
-    public function gitIsNotInitialized(): bool
-    {
-        return ! $this->gitIsInitialized();
+        return static::getGitDir() !== null;
     }
 }

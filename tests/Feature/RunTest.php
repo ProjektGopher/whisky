@@ -11,12 +11,12 @@ it('deletes skip-once file if exists as long as whisky.json exists and does not 
 
     File::shouldReceive('exists')
         ->once()
-        ->with(Platform::cwd('.git/hooks/skip-once'))
+        ->with(Platform::getGitDir('hooks/skip-once'))
         ->andReturnTrue();
 
     File::shouldReceive('delete')
         ->once()
-        ->with(Platform::cwd('.git/hooks/skip-once'))
+        ->with(Platform::getGitDir('hooks/skip-once'))
         ->andReturnTrue();
 
     $tmp_file = Platform::temp_test_path('whisky_test_commit_msg');

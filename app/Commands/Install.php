@@ -22,7 +22,8 @@ class Install extends Command
 
     public function handle(): int
     {
-        if ($this->platform->gitIsNotInitialized()) {
+        if (! Platform::gitIsInitialized()) {
+            $this->info(Platform::getGitDir());
             $this->error('Git has not been initialized in this project, aborting...');
 
             return Command::FAILURE;
@@ -73,7 +74,7 @@ class Install extends Command
             if ($this->option('verbose')) {
                 $this->info('Verifying hooks are executable...');
             }
-            exec('chmod +x '.Platform::cwd('.git/hooks').'/*');
+            exec('chmod +x '.Platform::getGitDir('hooks').'/*');
             exec('chmod +x '.Whisky::base_path('bin/run-hook'));
         }
 

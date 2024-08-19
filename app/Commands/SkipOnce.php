@@ -14,7 +14,7 @@ class SkipOnce extends Command
 
     public function handle(): int
     {
-        File::put(Platform::cwd('.git/hooks/skip-once'), '');
+        File::put(Platform::getGitDir('hooks/skip-once'), '');
 
         $this->info('Next hook will be skipped.');
         $this->line('If the action you\'re about to take has a `pre` and `post` hook');
