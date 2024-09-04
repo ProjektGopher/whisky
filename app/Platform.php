@@ -2,8 +2,12 @@
 
 namespace ProjektGopher\Whisky;
 
+use Illuminate\Support\Facades\Process;
+
 class Platform
 {
+    const GIT_DIR_CMD = 'git rev-parse --git-dir';
+
     public static function cwd(string $path = ''): string
     {
         if ($path) {
@@ -33,17 +37,20 @@ class Platform
 
     public static function git_path(string $path = ''): ?string
     {
-        $output = shell_exec('git rev-parse --git-dir');
+        /**
+         * We use the `Process` facade here to run this
+         * command instead of `shell_exec()` because
+         * it's easier to mock in our test suite.
+         */
+        $output = Process::run(static::GIT_DIR_CMD);
 
-        if ($output === null) {
+        if ($output->failed()) {
             return null;
         }
 
-        if ($path) {
-            return static::normalizePath(rtrim($output, "\n").'/'.$path);
-        }
-
-        return static::normalizePath(rtrim($output, "\n"));
+        return empty($path) === true
+            ? static::normalizePath(rtrim($output->output(), "\n"))
+            : static::normalizePath(rtrim($output->output(), "\n") . "/{$path}");
     }
 
     public static function getGlobalComposerHome(): string

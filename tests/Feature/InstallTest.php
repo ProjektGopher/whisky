@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\File;
+use Illuminate\Process\FakeProcessResult;
+use Illuminate\Support\Facades\Process;
+use ProjektGopher\Whisky\Platform;
 
 it('has an install command', function () {
     $this->artisan('list')
@@ -9,10 +11,15 @@ it('has an install command', function () {
 });
 
 it('fails if git is not initialized', function () {
-    File::shouldReceive('exists')
+    Process::shouldReceive('run')
         ->once()
-        ->with(normalizePath(base_path('.git')))
-        ->andReturnFalse();
+        ->with(Platform::GIT_DIR_CMD)
+        ->andReturn(new FakeProcessResult(
+            command: Platform::GIT_DIR_CMD,
+            exitCode: 1,
+            output: '',
+            errorOutput: 'fatal: not a git repository (or any of the parent directories): .git\n',
+        ));
 
     $this->artisan('install')
         ->expectsOutputToContain('Git has not been initialized in this project, aborting...')
