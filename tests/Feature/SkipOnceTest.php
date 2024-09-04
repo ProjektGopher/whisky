@@ -14,8 +14,8 @@ it('creates a skip-once file', function () {
         ->expectsOutputToContain('Next hook will be skipped.')
         ->assertExitCode(0);
 
-    expect(File::exists(Platform::getGitDir('hooks/skip-once')))->toBeTrue();
+    expect(File::exists(Platform::git_path('hooks/skip-once')))->toBeTrue();
 
     // Cleanup
-    File::delete(Platform::getGitDir('hooks/skip-once'));
+    File::delete(Platform::git_path('hooks/skip-once'));
 });

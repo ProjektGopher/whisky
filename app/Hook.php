@@ -29,7 +29,7 @@ class Hook
 
     public function uninstall(): bool
     {
-        $path = Platform::getGitDir("hooks/{$this->hook}");
+        $path = Platform::git_path("hooks/{$this->hook}");
 
         if ($this->fileIsMissing()) {
             // This should be unreachable.
@@ -53,7 +53,7 @@ class Hook
     // use ensureFileExists instead?
     public function fileExists(): bool
     {
-        return File::exists(Platform::getGitDir("hooks/{$this->hook}"));
+        return File::exists(Platform::git_path("hooks/{$this->hook}"));
     }
 
     public function fileIsMissing(): bool
@@ -82,7 +82,7 @@ class Hook
      */
     public function enable(): void
     {
-        File::put(Platform::getGitDir("hooks/{$this->hook}"), '#!/bin/sh'.PHP_EOL);
+        File::put(Platform::git_path("hooks/{$this->hook}"), '#!/bin/sh'.PHP_EOL);
     }
 
     /**
@@ -101,7 +101,7 @@ class Hook
     public function isInstalled(): bool
     {
         return Str::contains(
-            File::get(Platform::getGitDir("hooks/{$this->hook}")),
+            File::get(Platform::git_path("hooks/{$this->hook}")),
             $this->getSnippets()->toArray(),
         );
     }
@@ -112,7 +112,7 @@ class Hook
     public function install(): void
     {
         File::append(
-            Platform::getGitDir("hooks/{$this->hook}"),
+            Platform::git_path("hooks/{$this->hook}"),
             $this->getSnippets()->first().PHP_EOL,
         );
     }
@@ -174,7 +174,7 @@ class Hook
         $result = collect();
 
         if ($flags & self::FROM_GIT) {
-            $result->push(...collect(File::files(Platform::getGitDir('hooks')))
+            $result->push(...collect(File::files(Platform::git_path('hooks')))
                 ->map(fn (SplFileInfo $file) => $file->getFilename())
                 ->filter(fn (string $filename) => ! str_ends_with($filename, 'sample'))
             );

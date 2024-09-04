@@ -31,7 +31,7 @@ class Platform
         return $path;
     }
 
-    public static function getGitDir(string $path = ''): ?string
+    public static function git_path(string $path = ''): ?string
     {
         $output = shell_exec('git rev-parse --git-dir');
 
@@ -73,6 +73,6 @@ class Platform
 
     public static function gitIsInitialized(): bool
     {
-        return static::getGitDir() !== null;
+        return static::git_path() !== null;
     }
 }

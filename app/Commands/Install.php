@@ -74,7 +74,7 @@ class Install extends Command
             if ($this->option('verbose')) {
                 $this->info('Verifying hooks are executable...');
             }
-            exec('chmod +x '.Platform::getGitDir('hooks').'/*');
+            exec('chmod +x '.Platform::git_path('hooks').'/*');
             exec('chmod +x '.Whisky::base_path('bin/run-hook'));
         }
 
