@@ -15,7 +15,7 @@ class Audit extends Command
 
     public function handle(): int
     {
-        $platform = new Platform();
+        $platform = new Platform;
 
         $this->table(
             ['key', 'value'],

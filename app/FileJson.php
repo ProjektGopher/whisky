@@ -54,7 +54,7 @@ class FileJson
      */
     protected function validate(mixed $content): void
     {
-        $options = new Context();
+        $options = new Context;
         // $options->version = 7;
 
         $schema = Schema::import($this->getSchemaValidation(), $options);
