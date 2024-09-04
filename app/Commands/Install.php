@@ -23,7 +23,6 @@ class Install extends Command
     public function handle(): int
     {
         if (! Platform::gitIsInitialized()) {
-            $this->info(Platform::getGitDir());
             $this->error('Git has not been initialized in this project, aborting...');
 
             return Command::FAILURE;
