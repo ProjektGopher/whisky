@@ -35,6 +35,7 @@ class Update extends Command
             }
 
             $hook->install();
+            $hook->ensureExecutable();
 
             if ($this->option('verbose')) {
                 $this->info("{$hook->name} git hook installed successfully.");

@@ -86,6 +86,16 @@ class Hook
     }
 
     /**
+     * Ensure the hook is executable.
+     */
+    public function ensureExecutable(): void
+    {
+        if ((new Platform)->isNotWindows()) {
+            exec('chmod +x '.Platform::cwd(".git/hooks/{$this->hook}"));
+        }
+    }
+
+    /**
      * Checks if the hook uses Whisky.
      */
     public function isInstalled(): bool
