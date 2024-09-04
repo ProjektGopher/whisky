@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Process;
 
 class Platform
 {
+    // Possibly use `git rev-parse --absolute-git-dir` instead for consistency.
     const GIT_DIR_CMD = 'git rev-parse --git-dir';
 
     public static function cwd(string $path = ''): string
