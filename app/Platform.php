@@ -75,4 +75,9 @@ class Platform
     {
         return static::git_path() !== null;
     }
+
+    public static function gitIsNotInitialized(): bool
+    {
+        return ! static::gitIsInitialized();
+    }
 }

@@ -36,6 +36,7 @@ class Audit extends Command
                 ['isWindows', $platform->isWindows() ? 'yes' : 'no'],
                 ['isNotWindows', $platform->isNotWindows() ? 'yes' : 'no'],
                 ['gitIsInitialized', Platform::gitIsInitialized() ? 'yes' : 'no'],
+                ['gitIsNotInitialized', Platform::gitIsNotInitialized() ? 'yes' : 'no'],
                 ['- global -', ''],
                 ['base_path', base_path()],
                 ['normalized base_path', Platform::normalizePath(base_path())],
