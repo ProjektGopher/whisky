@@ -140,6 +140,7 @@ class Hook
     public function getSnippets(): Collection
     {
         $cwd = Platform::cwd();
+
         return collect([
             "pushd {$cwd} && {$this->bin} run {$this->hook} \"$1\" && popd",
             // Legacy Snippets.

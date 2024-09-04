@@ -50,7 +50,7 @@ class Platform
 
         return empty($path) === true
             ? static::normalizePath(rtrim($output->output(), "\n"))
-            : static::normalizePath(rtrim($output->output(), "\n") . "/{$path}");
+            : static::normalizePath(rtrim($output->output(), "\n")."/{$path}");
     }
 
     public static function getGlobalComposerHome(): string
