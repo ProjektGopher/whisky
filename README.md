@@ -63,6 +63,30 @@ For a complete list of supported git hooks, see the [Git Documentation](https://
 
 Adding or removing any **hooks** (_not_ individual commands) to your `whisky.json` file should be followed by `./vendor/bin/whisky update` to ensure that these changes are reflected in your `.git/hooks` directory.
 
+### Working With Hook Arguments
+Some hooks in git are passed arguments.
+
+The `commit-msg` hook is a perfect example. It's passed the path to git's temporary file containing the commit message,
+which can then be used by scripts like npm's [commitlint](https://commitlint.js.org/) to allow or prevent commit
+messages that might not conform to your project's standards.
+
+To use this argument that git passes, you can _optionally_ include `$1` in your array of commands.
+(You should wrap it in escaped double quotes to prevent odd behavior due to whitespace)
+
+```js
+// whisky.json
+// ...
+  "commit-msg": [
+    "npx --no -- commitlint --edit \"$1\""
+  ]
+// ...
+```
+
+> [!IMPORTANT]  
+> For `commitlint` specifically, you'll need to follow the instructions in their
+> [documentation](https://commitlint.js.org/guides/getting-started.html),
+> as it will require extra packages and setup to run in your project.
+
 ### Automating Hook Updates
 While we suggest leaving Whisky as an 'opt-in' tool, by adding a couple of Composer scripts we can _ensure_ consistent git hooks for all project contributors. This will **force** everyone on the project to use Whisky:
 
