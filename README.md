@@ -58,7 +58,8 @@ The `install` command will create a `whisky.json` file in your project root:
 
 For a complete list of supported git hooks, see the [Git Documentation](https://git-scm.com/docs/githooks#_hooks).
 
-> **Warning** all hooks are **evaluated as-is** in the terminal. Keep this in mind when committing anything involving changes to your `whisky.json`.
+> [!CAUTION]
+> all hooks are **evaluated as-is** in the terminal. Keep this in mind when committing anything involving changes to your `whisky.json`.
 
 Adding or removing any **hooks** (_not_ individual commands) to your `whisky.json` file should be followed by `./vendor/bin/whisky update` to ensure that these changes are reflected in your `.git/hooks` directory.
 
@@ -93,7 +94,8 @@ In this case, running the following command will have the exact same effect.
 ./vendor/bin/whisky skip-once
 ``` 
 
-> **Note** by adding `alias whisky=./vendor/bin/whisky` to your `bash.rc` file, you can shorten the length of this command.
+> [!TIP] 
+> by adding `alias whisky=./vendor/bin/whisky` to your `bash.rc` file, you can shorten the length of this command.
 
 ### Disabling Hooks
 Adding a hook's name to the `disabled` array in your `whisky.json` will disable the hook from running.
@@ -115,7 +117,8 @@ you to run scripts written in _any_ language.
 // ...
 ```
 
-> **Note** When doing this, make sure any scripts referenced are **executable**:
+> [!NOTE] 
+> When doing this, make sure any scripts referenced are **executable**:
 ```bash
 chmod +x ./scripts/*
 ```
@@ -142,7 +145,8 @@ whisky uninstall -n
 
 
 ## Contributing
-> **Note** Don't build the binary when contributing. The binary will be built when a release is tagged.
+> [!NOTE] 
+> Don't build the binary when contributing. The binary will be built when a release is tagged.
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for more details.
 
