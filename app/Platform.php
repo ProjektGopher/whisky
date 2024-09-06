@@ -15,6 +15,15 @@ class Platform
         return static::normalizePath(getcwd());
     }
 
+    public static function temp_test_path(string $path = ''): string
+    {
+        if ($path) {
+            return static::cwd("tests/tmp/{$path}");
+        }
+
+        return static::cwd('tests/tmp');
+    }
+
     public static function normalizePath(string $path): string
     {
         if ((new self)->isWindows()) {
