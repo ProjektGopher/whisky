@@ -76,7 +76,7 @@ it('accepts an optional argument and the argument is correct', function () {
     expect(file_get_contents($tmp_file))
         ->toBe((new Platform)->isNotWindows()
             ? '.git/COMMIT_EDITMSG'.PHP_EOL
-            : '".git/COMMIT_EDITMSG"'
+            : '".git/COMMIT_EDITMSG"'.PHP_EOL
         );
 
     unlink($tmp_file);
@@ -142,7 +142,7 @@ it('handles a missing expected argument gracefully', function () {
     expect(file_get_contents($tmp_file))
         ->toBe((new Platform)->isNotWindows()
             ? PHP_EOL
-            : '""'
+            : '""\r\n'
         );
 
     unlink($tmp_file);
