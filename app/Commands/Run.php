@@ -12,7 +12,7 @@ use Symfony\Component\Process\Process as SymfonyProcess;
 
 class Run extends Command
 {
-    protected $signature = 'run {hook}';
+    protected $signature = 'run {hook} {argument?}';
 
     protected $description = 'Run the scripts for a given hook';
 
@@ -41,6 +41,12 @@ class Run extends Command
         Hook::make($this->argument('hook'))
             ->getScripts()
             ->each(function (string $script) use (&$exitCode): void {
+                $script = str_replace(
+                    search: '$1',
+                    replace: trim($this->argument('argument'), '"'),
+                    subject: $script,
+                );
+
                 $isTtySupported = SymfonyProcess::isTtySupported();
 
                 $result = $isTtySupported
