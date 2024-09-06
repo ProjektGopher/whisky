@@ -74,7 +74,7 @@ it('accepts an optional argument and the argument is correct', function () {
         ->assertExitCode(0);
 
     expect(file_get_contents($tmp_file))
-        ->toContain('.git/COMMIT_EDITMSG');
+        ->toBe('.git/COMMIT_EDITMSG'.PHP_EOL);
 
     unlink($tmp_file);
 });
