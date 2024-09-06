@@ -1,11 +1,6 @@
 {
-    "disabled": [
-        "commit-msg"
-    ],
+    "disabled": [],
     "hooks": {
-        "commit-msg": [
-            "echo \"$1\""
-        ],
         "pre-commit": [
             "composer lint -- --test"
         ],
