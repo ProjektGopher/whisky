@@ -41,7 +41,11 @@ class Run extends Command
         Hook::make($this->argument('hook'))
             ->getScripts()
             ->each(function (string $script) use (&$exitCode): void {
-                $script = str_replace('$1', $this->argument('argument'), $script);
+                $script = str_replace(
+                    search: '$1',
+                    replace: trim($this->argument('argument'), '"'),
+                    subject: $script,
+                );
 
                 $isTtySupported = SymfonyProcess::isTtySupported();
 
