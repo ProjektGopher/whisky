@@ -142,7 +142,7 @@ it('handles a missing expected argument gracefully', function () {
     expect(file_get_contents($tmp_file))
         ->toBe((new Platform)->isNotWindows()
             ? PHP_EOL
-            : '""\r\n'
+            : "\"\"\r\n"
         );
 
     unlink($tmp_file);
