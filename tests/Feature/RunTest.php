@@ -137,7 +137,7 @@ it('handles a missing expected argument gracefully', function () {
         ->assertExitCode(0);
 
     expect(file_get_contents($tmp_file))
-        ->toBe("\n");
+        ->toBe(PHP_EOL);
 
     unlink($tmp_file);
 });
