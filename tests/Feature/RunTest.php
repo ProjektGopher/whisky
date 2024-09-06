@@ -19,14 +19,16 @@ it('deletes skip-once file if exists as long as whisky.json exists and does not 
         ->with(Platform::cwd('.git/hooks/skip-once'))
         ->andReturnTrue();
 
+    $tmp_file = Platform::temp_test_path('whisky_test_commit_msg');
+
     File::shouldReceive('get')
         ->with(Platform::cwd('whisky.json'))
-        ->andReturn(<<<'JSON'
+        ->andReturn(<<<"JSON"
         {
             "disabled": [],
             "hooks": {
                 "pre-commit": [
-                    "echo \"poop\" > /tmp/whisky_test_commit_msg"
+                    "echo \"poop\" > {$tmp_file}"
                 ]
             }
         }
@@ -35,7 +37,7 @@ it('deletes skip-once file if exists as long as whisky.json exists and does not 
     $this->artisan('run pre-commit')
         ->assertExitCode(0);
 
-    expect(file_exists('/tmp/whisky_test_commit_msg'))
+    expect(file_exists($tmp_file))
         ->toBeFalse();
 });
 
@@ -48,6 +50,8 @@ it('accepts an optional argument and the argument is correct', function () {
         ->with(Platform::cwd('.git/hooks/skip-once'))
         ->andReturnFalse();
 
+    $tmp_file = Platform::temp_test_path('whisky_test_commit_msg');
+
     /**
      * We need to send the output to the disk
      * otherwise the output is sent to the
@@ -55,12 +59,12 @@ it('accepts an optional argument and the argument is correct', function () {
      */
     File::shouldReceive('get')
         ->with(Platform::cwd('whisky.json'))
-        ->andReturn(<<<'JSON'
+        ->andReturn(<<<"JSON"
         {
             "disabled": [],
             "hooks": {
                 "commit-msg": [
-                    "echo \"$1\" > /tmp/whisky_test_commit_msg"
+                    "echo \"$1\" > {$tmp_file}"
                 ]
             }
         }
@@ -69,10 +73,10 @@ it('accepts an optional argument and the argument is correct', function () {
     $this->artisan('run commit-msg ".git/COMMIT_EDITMSG"')
         ->assertExitCode(0);
 
-    expect(file_get_contents('/tmp/whisky_test_commit_msg'))
+    expect(file_get_contents($tmp_file))
         ->toContain('.git/COMMIT_EDITMSG');
 
-    unlink('/tmp/whisky_test_commit_msg');
+    unlink($tmp_file);
 });
 
 it('still works if no arguments are passed to run command', function () {
@@ -84,14 +88,16 @@ it('still works if no arguments are passed to run command', function () {
         ->with(Platform::cwd('.git/hooks/skip-once'))
         ->andReturnFalse();
 
+    $tmp_file = Platform::temp_test_path('whisky_test_pre_commit');
+
     File::shouldReceive('get')
         ->with(Platform::cwd('whisky.json'))
-        ->andReturn(<<<'JSON'
+        ->andReturn(<<<"JSON"
         {
             "disabled": [],
             "hooks": {
                 "pre-commit": [
-                    "echo \"pre-commit\" > /dev/null"
+                    "echo \"pre-commit\" > {$tmp_file}"
                 ]
             }
         }
@@ -99,6 +105,8 @@ it('still works if no arguments are passed to run command', function () {
 
     $this->artisan('run pre-commit')
         ->assertExitCode(0);
+
+    unlink($tmp_file);
 });
 
 it('handles a missing expected argument gracefully', function () {
@@ -110,14 +118,16 @@ it('handles a missing expected argument gracefully', function () {
         ->with(Platform::cwd('.git/hooks/skip-once'))
         ->andReturnFalse();
 
+    $tmp_file = Platform::temp_test_path('whisky_test_commit_msg');
+
     File::shouldReceive('get')
         ->with(Platform::cwd('whisky.json'))
-        ->andReturn(<<<'JSON'
+        ->andReturn(<<<"JSON"
         {
             "disabled": [],
             "hooks": {
                 "commit-msg": [
-                    "echo \"$1\" > /tmp/whisky_test_commit_msg"
+                    "echo \"$1\" > {$tmp_file}"
                 ]
             }
         }
@@ -126,8 +136,8 @@ it('handles a missing expected argument gracefully', function () {
     $this->artisan('run commit-msg')
         ->assertExitCode(0);
 
-    expect(file_get_contents('/tmp/whisky_test_commit_msg'))
+    expect(file_get_contents($tmp_file))
         ->toBe("\n");
 
-    unlink('/tmp/whisky_test_commit_msg');
+    unlink($tmp_file);
 });
