@@ -12,5 +12,3 @@ parameters:
     universalObjectCratesClasses:
 
     excludePaths:
-
-    checkMissingIterableValueType: false
