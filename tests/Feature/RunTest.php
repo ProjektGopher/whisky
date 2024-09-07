@@ -47,7 +47,7 @@ it('accepts an optional argument and the argument is correct', function () {
         ->andReturnFalse();
 
     File::shouldReceive('exists')
-        ->with(Platform::cwd('.git/hooks/skip-once'))
+        ->with(Platform::git_path('hooks/skip-once'))
         ->andReturnFalse();
 
     $tmp_file = Platform::temp_test_path('whisky_test_commit_msg');
@@ -85,7 +85,7 @@ it('still works if no arguments are passed to run command', function () {
         ->andReturnFalse();
 
     File::shouldReceive('exists')
-        ->with(Platform::cwd('.git/hooks/skip-once'))
+        ->with(Platform::git_path('hooks/skip-once'))
         ->andReturnFalse();
 
     $tmp_file = Platform::temp_test_path('whisky_test_pre_commit');
@@ -115,7 +115,7 @@ it('handles a missing expected argument gracefully', function () {
         ->andReturnFalse();
 
     File::shouldReceive('exists')
-        ->with(Platform::cwd('.git/hooks/skip-once'))
+        ->with(Platform::git_path('hooks/skip-once'))
         ->andReturnFalse();
 
     $tmp_file = Platform::temp_test_path('whisky_test_commit_msg');
