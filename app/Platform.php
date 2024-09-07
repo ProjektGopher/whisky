@@ -2,10 +2,13 @@
 
 namespace ProjektGopher\Whisky;
 
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Process;
 
 class Platform
 {
+    // Possibly use `git rev-parse --absolute-git-dir` instead for consistency.
+    const GIT_DIR_CMD = 'git rev-parse --git-dir';
+
     public static function cwd(string $path = ''): string
     {
         if ($path) {
@@ -33,6 +36,24 @@ class Platform
         return $path;
     }
 
+    public static function git_path(string $path = ''): ?string
+    {
+        /**
+         * We use the `Process` facade here to run this
+         * command instead of `shell_exec()` because
+         * it's easier to mock in our test suite.
+         */
+        $output = Process::run(static::GIT_DIR_CMD);
+
+        if ($output->failed()) {
+            return null;
+        }
+
+        return empty($path) === true
+            ? static::normalizePath(rtrim($output->output(), "\n"))
+            : static::normalizePath(rtrim($output->output(), "\n")."/{$path}");
+    }
+
     public static function getGlobalComposerHome(): string
     {
         return rtrim(shell_exec('composer -n global config home --quiet'), "\n");
@@ -58,13 +79,13 @@ class Platform
         return ! $this->isWindows();
     }
 
-    public function gitIsInitialized(): bool
+    public static function gitIsInitialized(): bool
     {
-        return File::exists(Platform::cwd('.git'));
+        return static::git_path() !== null;
     }
 
-    public function gitIsNotInitialized(): bool
+    public static function gitIsNotInitialized(): bool
     {
-        return ! $this->gitIsInitialized();
+        return ! static::gitIsInitialized();
     }
 }

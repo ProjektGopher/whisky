@@ -25,8 +25,8 @@ class Run extends Command
             return Command::FAILURE;
         }
 
-        if (File::exists(Platform::cwd('.git/hooks/skip-once'))) {
-            File::delete(Platform::cwd('.git/hooks/skip-once'));
+        if (File::exists(Platform::git_path('hooks/skip-once'))) {
+            File::delete(Platform::git_path('hooks/skip-once'));
 
             return Command::SUCCESS;
         }
