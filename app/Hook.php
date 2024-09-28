@@ -38,7 +38,10 @@ class Hook
 
         $contents = File::get($path);
         $commands = $this->getSnippets()
-            ->map(fn (string $snippet): string => $snippet.PHP_EOL)
+            ->map(fn (string $snippet): array => [$this->getPrepend().$snippet.PHP_EOL, $snippet.PHP_EOL])
+            ->collapse()
+            ->unique()
+            ->values()
             ->toArray();
 
         if (! Str::contains($contents, $commands)) {
@@ -113,7 +116,7 @@ class Hook
     {
         File::append(
             Platform::cwd(".git/hooks/{$this->hook}"),
-            $this->getSnippets()->first().PHP_EOL,
+            $this->getPrepend().$this->getSnippets()->first().PHP_EOL,
         );
     }
 
@@ -128,6 +131,17 @@ class Hook
     public function getScripts(): Collection
     {
         return collect(Whisky::readConfig("hooks.{$this->hook}"));
+    }
+
+    public function getPrepend(): string
+    {
+        $prepend = Whisky::readConfig('prepend');
+
+        if (empty($prepend)) {
+            return '';
+        }
+
+        return trim($prepend, ' ').' ';
     }
 
     /**
@@ -172,9 +186,10 @@ class Hook
         $result = collect();
 
         if ($flags & self::FROM_GIT) {
-            $result->push(...collect(File::files(Platform::cwd('.git/hooks')))
-                ->map(fn (SplFileInfo $file) => $file->getFilename())
-                ->filter(fn (string $filename) => ! str_ends_with($filename, 'sample'))
+            $result->push(
+                ...collect(File::files(Platform::cwd('.git/hooks')))
+                    ->map(fn (SplFileInfo $file) => $file->getFilename())
+                    ->filter(fn (string $filename) => ! str_ends_with($filename, 'sample'))
             );
         }
 

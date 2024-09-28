@@ -80,6 +80,9 @@ class FileJson
                     'properties' => [],
                     'additionalProperties' => false,
                 ],
+                'prepend' => [
+                    'type' => 'string',
+                ],
             ],
             'required' => ['hooks'],
             'additionalProperties' => false,
