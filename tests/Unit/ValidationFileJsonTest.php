@@ -150,6 +150,7 @@ it('accepts other valid json', function ($test_json) {
     '{ "hooks": {  } }',
     '{ "hooks": { "pre-commit": [ "composer lint -- --test" ] } }',
     '{ "disabled": [ "pre-commit" ], "hooks": { "pre-commit": [ "composer lint -- --test" ] } }',
+    '{ "prepend": "vendor/bin/sail php", "disabled": [ "pre-commit" ], "hooks": { "pre-commit": [ "composer lint -- --test" ] } }',
 ]);
 
 it('accepts valid json with invalid schema when validation skipped', function ($test_json) {
