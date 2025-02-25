@@ -74,7 +74,6 @@ class Install extends Command
                 $this->info('Verifying hooks are executable...');
             }
             exec('chmod +x '.Platform::cwd('.git/hooks').'/*');
-            exec('chmod +x '.Whisky::base_path('bin/run-hook'));
         }
 
         $this->info('Git hooks installed successfully.');
