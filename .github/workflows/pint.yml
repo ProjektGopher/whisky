@@ -11,7 +11,7 @@ jobs:
         operating-system:
           - ubuntu-latest
         php-version:
-          - "8.2"
+          - "8.4"
     name: php ${{ matrix.php-version }} on ${{ matrix.operating-system }}
     runs-on: ${{ matrix.operating-system }}
     steps:
@@ -20,7 +20,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.4"
           extensions: bcmath, ctype, fileinfo, json, mbstring, openssl, pdo, tokenizer, xml
           coverage: none
       - name: Get composer cache directory
