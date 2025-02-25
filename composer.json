@@ -63,7 +63,7 @@
             "vendor/bin/pint"
         ],
         "stan": [
-            "vendor/bin/phpstan analyse"
+            "vendor/bin/phpstan analyse --memory-limit=1G"
         ],
         "test": [
             "@php whisky test"
