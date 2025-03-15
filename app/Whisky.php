@@ -19,11 +19,13 @@ class Whisky
 
     public static function bin_path(): string
     {
-        return Platform::normalizePath(match (true) {
+        $path = Platform::normalizePath(match (true) {
             self::dogfooding() => Platform::cwd('whisky'),
             self::isRunningGlobally() => Platform::getGlobalComposerBinDir().'/whisky',
             default => Platform::cwd('vendor/bin/whisky'),
         });
+
+        return Platform::escapeSpaces($path);
     }
 
     public static function dogfooding(): bool
