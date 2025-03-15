@@ -26,13 +26,16 @@ class Platform
 
     public static function normalizePath(string $path): string
     {
-        $path = str_replace(' ', '\\ ', $path);
-
         if ((new self)->isWindows()) {
             return str_replace('\\', '/', $path);
         }
 
         return $path;
+    }
+
+    public static function escapeSpaces(string $path): string
+    {
+        return preg_replace('/(?<!\\\) /', '\\ ', $path);
     }
 
     public static function getGlobalComposerHome(): string
