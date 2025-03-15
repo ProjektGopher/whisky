@@ -42,19 +42,16 @@ class Update extends Command
             }
 
             $hook->install();
+
+            if ($this->option('verbose')) {
+                $this->info("Ensuring {$hook->name} hook is executable...");
+            }
             $hook->ensureExecutable();
 
             if ($this->option('verbose')) {
                 $this->info("{$hook->name} git hook installed successfully.");
             }
         });
-
-        if ($this->platform->isNotWindows()) {
-            if ($this->option('verbose')) {
-                $this->info('Verifying hooks are executable...');
-            }
-            exec('chmod +x '.Platform::cwd('.git/hooks').'/*');
-        }
 
         $this->line('Git hooks updated successfully.');
 
