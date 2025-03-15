@@ -26,7 +26,7 @@ class Platform
 
     public static function normalizePath(string $path): string
     {
-        $path = str_replace(' ', '\ ', $path);
+        $path = str_replace(' ', '\\ ', $path);
 
         if ((new self)->isWindows()) {
             return str_replace('\\', '/', $path);
